@@ -63,7 +63,7 @@
                           />
                         </div>
                         <div class="add-group">
-                          <button class="btn btn-primary btn-sm ms-2" @click="createTicket">
+                          <button class="btn btn-primary btn-sm ms-2" @click="openAddModal">
                             <i class="fa fa-plus"></i> Nouveau Ticket
                           </button>
                         </div>
@@ -129,8 +129,14 @@
                         <button class="btn btn-sm btn-info me-1" @click="viewTicket(ticket.id)">
                           <i class="fa fa-eye"></i>
                         </button>
+                        <button class="btn btn-sm btn-warning me-1" @click="openEditModal(ticket)">
+                          <i class="fa fa-edit"></i>
+                        </button>
                         <button class="btn btn-sm btn-success me-1" @click="assignTicket(ticket.id)">
                           <i class="fa fa-user-plus"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger me-1" @click="deleteTicket(ticket.id)">
+                          <i class="fa fa-trash"></i>
                         </button>
                         <button class="btn btn-sm btn-primary" @click="closeTicket(ticket.id)">
                           <i class="fa fa-check"></i>
@@ -204,6 +210,160 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal Ajouter/Éditer Ticket -->
+      <div class="modal fade" id="ticketModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ isEditMode ? 'Éditer le ticket' : 'Nouveau ticket' }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Utilisateur <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.user"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Type d'utilisateur <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Patient', 'Cardiologue', 'Hôpital', 'Autre']"
+                        v-model="formData.userType"
+                        placeholder="Sélectionner type"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Type de ticket <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Technique', 'Paiement', 'Compte', 'Partenariat', 'Autre']"
+                        v-model="formData.type"
+                        placeholder="Sélectionner type"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Priorité <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Urgente', 'Haute', 'Normale', 'Basse']"
+                        v-model="formData.priority"
+                        placeholder="Sélectionner priorité"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Statut</label>
+                      <vue-select
+                        :options="['Ouvert', 'En cours', 'Résolu', 'Fermé']"
+                        v-model="formData.status"
+                        placeholder="Sélectionner statut"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Agent assigné</label>
+                      <vue-select
+                        :options="agentNames"
+                        v-model="formData.agent"
+                        placeholder="Sélectionner agent"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Sujet <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.subject"
+                        required
+                        placeholder="Brève description du problème"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Description</label>
+                      <textarea
+                        class="form-control"
+                        v-model="formData.description"
+                        rows="4"
+                        placeholder="Détails du problème..."
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" @click="submitForm">
+                {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Confirmation Suppression -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmer la suppression</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Êtes-vous sûr de vouloir supprimer ce ticket ?</p>
+              <p class="text-danger"><small>Cette action est irréversible.</small></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-danger" @click="confirmDelete">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Assigner Agent -->
+      <div class="modal fade" id="assignModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Assigner un agent</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="input-block local-forms">
+                <label>Sélectionner un agent</label>
+                <vue-select
+                  :options="availableAgents"
+                  v-model="selectedAgent"
+                  placeholder="Choisir un agent"
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" @click="confirmAssign">Assigner</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -216,6 +376,23 @@ export default {
       title: "Support & Tickets",
       text: "Gestion des tickets",
       searchQuery: "",
+      isEditMode: false,
+      deleteId: null,
+      assignId: null,
+      selectedAgent: null,
+      formData: {
+        id: null,
+        ticketId: "",
+        user: "",
+        userType: "",
+        type: "",
+        priority: "Normale",
+        status: "Ouvert",
+        agent: null,
+        subject: "",
+        description: "",
+        date: ""
+      },
       statuses: ["Tous", "Ouvert", "En cours", "Résolu", "Fermé"],
       priorities: ["Toutes", "Urgente", "Haute", "Normale", "Basse"],
       types: ["Tous", "Technique", "Paiement", "Compte", "Autre"],
@@ -254,6 +431,15 @@ export default {
         t.subject.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         t.ticketId.toLowerCase().includes(this.searchQuery.toLowerCase())
       );
+    },
+    agentNames() {
+      return this.agents.map(a => a.name);
+    },
+    availableAgents() {
+      return this.agents.filter(a => a.online).map(a => ({
+        label: `${a.name} (${a.activeTickets} tickets actifs)`,
+        value: a.name
+      }));
     }
   },
   methods: {
@@ -275,18 +461,105 @@ export default {
       };
       return classes[status] || 'badge bg-secondary';
     },
-    createTicket() {
-      this.$toast.info('Création d\'un nouveau ticket');
+    openAddModal() {
+      this.isEditMode = false;
+      this.resetForm();
+      const modal = new bootstrap.Modal(document.getElementById('ticketModal'));
+      modal.show();
+    },
+    openEditModal(ticket) {
+      this.isEditMode = true;
+      this.formData = { ...ticket };
+      const modal = new bootstrap.Modal(document.getElementById('ticketModal'));
+      modal.show();
+    },
+    resetForm() {
+      this.formData = {
+        id: null,
+        ticketId: "",
+        user: "",
+        userType: "",
+        type: "",
+        priority: "Normale",
+        status: "Ouvert",
+        agent: null,
+        subject: "",
+        description: "",
+        date: ""
+      };
+    },
+    submitForm() {
+      if (!this.formData.user || !this.formData.type || !this.formData.subject) {
+        this.$toast.error('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (this.isEditMode) {
+        const index = this.tickets.findIndex(t => t.id === this.formData.id);
+        if (index !== -1) {
+          this.tickets[index] = { ...this.formData };
+          this.$toast.success('Ticket mis à jour avec succès');
+        }
+      } else {
+        const newTicket = {
+          ...this.formData,
+          id: this.tickets.length + 1,
+          ticketId: `#${1023 + this.tickets.length}`,
+          date: new Date().toLocaleDateString('fr-FR')
+        };
+        this.tickets.push(newTicket);
+        this.$toast.success('Ticket créé avec succès');
+      }
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('ticketModal'));
+      modal.hide();
+      this.resetForm();
+    },
+    deleteTicket(id) {
+      this.deleteId = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      modal.show();
+    },
+    confirmDelete() {
+      this.tickets = this.tickets.filter(t => t.id !== this.deleteId);
+      this.$toast.success('Ticket supprimé avec succès');
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+      modal.hide();
+      this.deleteId = null;
+    },
+    assignTicket(id) {
+      this.assignId = id;
+      this.selectedAgent = null;
+      const modal = new bootstrap.Modal(document.getElementById('assignModal'));
+      modal.show();
+    },
+    confirmAssign() {
+      if (!this.selectedAgent) {
+        this.$toast.error('Veuillez sélectionner un agent');
+        return;
+      }
+
+      const index = this.tickets.findIndex(t => t.id === this.assignId);
+      if (index !== -1) {
+        this.tickets[index].agent = typeof this.selectedAgent === 'object' ? this.selectedAgent.value : this.selectedAgent;
+        this.tickets[index].status = 'En cours';
+        this.$toast.success('Ticket assigné à ' + this.tickets[index].agent);
+      }
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('assignModal'));
+      modal.hide();
+      this.assignId = null;
+      this.selectedAgent = null;
     },
     viewTicket(id) {
       this.$toast.info('Affichage du ticket #' + id);
     },
-    assignTicket(id) {
-      this.$toast.success('Ticket assigné');
-    },
     closeTicket(id) {
-      if (confirm('Fermer ce ticket ?')) {
-        this.$toast.success('Ticket fermé');
+      const index = this.tickets.findIndex(t => t.id === id);
+      if (index !== -1) {
+        this.tickets[index].status = 'Fermé';
+        this.$toast.success('Ticket fermé avec succès');
       }
     }
   }

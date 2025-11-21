@@ -5,7 +5,7 @@
     "separateRoute": true,
     "menu": [
       {
-        "menuValue": "Dashboard",
+        "menuValue": "Tableau de bord",
         "hasSubRoute": false,
         "showSubRoute": false,
         "image": "menu-icon-01.svg",
@@ -15,94 +15,39 @@
       },
       {
         "menuValue": "Patients",
-        "hasSubRoute": true,
+        "hasSubRoute": false,
         "showSubRoute": false,
         "image": "menu-icon-03.svg",
-        "active_link": "patients",
-        "subMenus": [
-          {
-            "menuValue": "Liste des patients",
-            "route": "/patients/patients-list",
-            "active_link": "/patients/patients-list"
-          },
-          {
-            "menuValue": "Ajouter patient",
-            "route": "/patients/add-patient",
-            "active_link": "/patients/add-patient"
-          },
-          {
-            "menuValue": "Profil patient",
-            "route": "/patients/patient-profile",
-            "active_link": "/patients/patient-profile"
-          }
-        ]
+        "route": "/patients/patients-list",
+        "active_link": "/patients",
+        "subMenus": []
       },
       {
         "menuValue": "Cardiologues",
-        "hasSubRoute": true,
+        "hasSubRoute": false,
         "showSubRoute": false,
         "image": "menu-icon-02.svg",
-        "active_link": "doctors",
-        "subMenus": [
-          {
-            "menuValue": "Liste des cardiologues",
-            "route": "/doctors/doctors-list",
-            "active_link": "/doctors/doctors-list"
-          },
-          {
-            "menuValue": "Ajouter cardiologue",
-            "route": "/doctors/add-doctor",
-            "active_link": "/doctors/add-doctor"
-          },
-          {
-            "menuValue": "Profil cardiologue",
-            "route": "/doctors/doctor-profile",
-            "active_link": "/doctors/doctor-profile"
-          }
-        ]
+        "route": "/doctors/doctors-list",
+        "active_link": "/doctors",
+        "subMenus": []
       },
       {
         "menuValue": "Hôpitaux",
-        "hasSubRoute": true,
+        "hasSubRoute": false,
         "showSubRoute": false,
         "image": "menu-icon-06.svg",
-        "active_link": "hospitals",
-        "subMenus": [
-          {
-            "menuValue": "Liste des hôpitaux",
-            "route": "/hospitals/hospitals-list",
-            "active_link": "/hospitals/hospitals-list"
-          },
-          {
-            "menuValue": "Ajouter hôpital",
-            "route": "/hospitals/add-hospital",
-            "active_link": "/hospitals/add-hospital"
-          },
-          {
-            "menuValue": "Profil hôpital",
-            "route": "/hospitals/hospital-profile",
-            "active_link": "/hospitals/hospital-profile"
-          }
-        ]
+        "route": "/hospitals/hospitals-list",
+        "active_link": "/hospitals",
+        "subMenus": []
       },
       {
         "menuValue": "Communication & Marketing",
-        "hasSubRoute": true,
+        "hasSubRoute": false,
         "showSubRoute": false,
         "image": "menu-icon-12.svg",
-        "active_link": "marketing",
-        "subMenus": [
-          {
-            "menuValue": "Campagnes",
-            "route": "/marketing/campaigns-list",
-            "active_link": "/marketing/campaigns-list"
-          },
-          {
-            "menuValue": "Créer campagne",
-            "route": "/marketing/create-campaign",
-            "active_link": "/marketing/create-campaign"
-          }
-        ]
+        "route": "/marketing/campaigns-list",
+        "active_link": "/marketing",
+        "subMenus": []
       }
     ]
   },
@@ -113,27 +58,12 @@
     "menu": [
       {
         "menuValue": "Revenus & Finances",
-        "hasSubRoute": true,
+        "hasSubRoute": false,
         "showSubRoute": false,
         "image": "menu-icon-07.svg",
-        "active_link": "accounts",
-        "subMenus": [
-          {
-            "menuValue": "Vue d'ensemble",
-            "route": "/accounts/invoices",
-            "active_link": "/accounts/invoices"
-          },
-          {
-            "menuValue": "Transactions",
-            "route": "/accounts/payments",
-            "active_link": "/accounts/payments"
-          },
-          {
-            "menuValue": "Reversements",
-            "route": "/accounts/expenses",
-            "active_link": "/accounts/expenses"
-          }
-        ]
+        "route": "/accounts/invoices",
+        "active_link": "/accounts",
+        "subMenus": []
       },
       {
         "menuValue": "Réconciliation Financière",

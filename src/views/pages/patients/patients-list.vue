@@ -50,7 +50,7 @@
                 <div class="row align-items-center">
                   <div class="col">
                     <div class="doctor-table-blk">
-                      <h3>Gestion des Patients ({{ totalPatients }})</h3>
+                      <h3>Liste des Patients</h3>
                       <div class="doctor-search-blk">
                         <div class="top-nav-search table-search-blk">
                           <form @submit.prevent="searchPatients">
@@ -58,7 +58,8 @@
                               v-model="searchQuery"
                               type="text"
                               class="form-control"
-                              placeholder="Rechercher (ID, nom, email, téléphone)..."
+                              placeholder="Rechercher patient..."
+                              v-model="searchQuery"
                             />
                             <button type="submit" class="btn">
                               <img src="@/assets/img/icons/search-normal.svg" alt="" />
@@ -66,12 +67,11 @@
                           </form>
                         </div>
                         <div class="add-group">
-                          <router-link
-                            to="add-patient"
+                          <button
+                            @click="openAddModal"
                             class="btn btn-primary add-pluss ms-2"
-                          >
-                            <img src="@/assets/img/icons/plus.svg" alt="" />
-                          </router-link>
+                            ><img src="@/assets/img/icons/plus.svg" alt=""
+                          /></button>
                           <a
                             href="javascript:;"
                             @click="refreshData"
@@ -223,9 +223,12 @@
                             <i class="fa fa-ellipsis-v"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-end">
-                            <router-link
+                            <a
                               class="dropdown-item"
-                              to="/patients/patient-profile"
+                              href="javascript:;"
+                              @click="openEditModal(record)"
+                              ><i class="fa-solid fa-pen-to-square m-r-5"></i>
+                              Modifier</a
                             >
                               <i class="fa fa-eye m-r-5"></i> Voir
                             </router-link>
@@ -238,15 +241,8 @@
                             <a
                               class="dropdown-item"
                               href="javascript:;"
-                              @click="suspendPatient(record)"
-                            >
-                              <i class="fa fa-pause m-r-5"></i> Suspendre
-                            </a>
-                            <a
-                              class="dropdown-item text-danger"
-                              href="javascript:;"
-                              data-bs-toggle="modal"
-                              data-bs-target="#delete_patient"
+                              @click="deletePatient(record.id)"
+                              ><i class="fa fa-trash-alt m-r-5"></i> Supprimer</a
                             >
                               <i class="fa fa-trash-alt m-r-5"></i> Supprimer
                             </a>
@@ -262,188 +258,231 @@
         </div>
       </div>
 
-      <!-- Statistics Section -->
-      <div class="row mt-4">
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Répartition par Abonnement</h5>
+      <!-- Modal Ajouter/Éditer Patient -->
+      <div class="modal fade" id="patientModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ isEditMode ? 'Éditer le patient' : 'Nouveau patient' }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="card-body">
-              <div class="mb-2">
-                <strong>Standard:</strong> 68% (8,486 patients)<br />
-                <small>3000 F CFA/mois</small>
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-primary" style="width: 68%">68%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Premium:</strong> 25% (3,120 patients)<br />
-                <small>5000 F CFA/mois</small>
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-success" style="width: 25%">25%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Famille:</strong> 7% (874 patients)<br />
-                <small>8000 F CFA/mois</small>
-              </div>
-              <div class="progress" style="height: 20px;">
-                <div class="progress-bar bg-warning" style="width: 7%">7%</div>
-              </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Nom complet <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.Name"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Genre <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Homme', 'Femme', 'Autre']"
+                        v-model="formData.Gender"
+                        placeholder="Sélectionner genre"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Âge</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        v-model="formData.Age"
+                        min="0"
+                        max="120"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Téléphone <span class="login-danger">*</span></label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        v-model="formData.Mobile"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Email <span class="login-danger">*</span></label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        v-model="formData.Email"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Pays</label>
+                      <vue-select
+                        :options="['Côte d\'Ivoire', 'Sénégal', 'Mali', 'Burkina Faso', 'Togo', 'Bénin', 'Niger', 'Guinée']"
+                        v-model="formData.Country"
+                        placeholder="Sélectionner pays"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Statut d'abonnement</label>
+                      <vue-select
+                        :options="['Standard', 'Premium', 'Famille', 'Essai']"
+                        v-model="formData.Subscription"
+                        placeholder="Sélectionner statut"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Pathologie principale</label>
+                      <vue-select
+                        :options="['Hypertension', 'Arythmie', 'Insuffisance cardiaque', 'Angine', 'Autre']"
+                        v-model="formData.Condition"
+                        placeholder="Sélectionner pathologie"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Notes médicales</label>
+                      <textarea
+                        class="form-control"
+                        v-model="formData.Notes"
+                        rows="3"
+                        placeholder="Notes additionnelles..."
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Observance des Patients</h5>
-            </div>
-            <div class="card-body">
-              <div class="mb-2">
-                <strong>Excellente:</strong> 45%
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-success" style="width: 45%">45%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Bonne:</strong> 38%
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-info" style="width: 38%">38%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Moyenne:</strong> 12%
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-warning" style="width: 12%">12%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Faible:</strong> 5%
-              </div>
-              <div class="progress" style="height: 20px;">
-                <div class="progress-bar bg-danger" style="width: 5%">5%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Santé Globale des Patients</h5>
-            </div>
-            <div class="card-body">
-              <ul class="list-unstyled">
-                <li class="mb-2">
-                  <i class="fa fa-check-circle text-success"></i>
-                  <strong>Tensions normales:</strong> 65%
-                </li>
-                <li class="mb-2">
-                  <i class="fa fa-exclamation-circle text-warning"></i>
-                  <strong>HTA modérée:</strong> 25%
-                </li>
-                <li class="mb-2">
-                  <i class="fa fa-times-circle text-danger"></i>
-                  <strong>HTA sévère:</strong> 10%
-                </li>
-                <li class="mb-2">
-                  <i class="fa fa-chart-line text-info"></i>
-                  <strong>Engagement moyen:</strong> 85%
-                </li>
-                <li>
-                  <i class="fa fa-heartbeat text-danger"></i>
-                  <strong>Mesures/jour:</strong> 2.3
-                </li>
-              </ul>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" @click="submitForm">
+                {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+              </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Regional Distribution -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <h5>Répartition Géographique</h5>
+      <!-- Modal Confirmation Suppression -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmer la suppression</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-2">
-                  <strong>Bénin:</strong> 35% (4,368)
-                  <div class="progress mt-2" style="height: 25px;">
-                    <div class="progress-bar bg-success" style="width: 35%">35%</div>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <strong>Côte d'Ivoire:</strong> 28% (3,494)
-                  <div class="progress mt-2" style="height: 25px;">
-                    <div class="progress-bar bg-primary" style="width: 28%">28%</div>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <strong>Sénégal:</strong> 18% (2,246)
-                  <div class="progress mt-2" style="height: 25px;">
-                    <div class="progress-bar bg-warning" style="width: 18%">18%</div>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <strong>Ghana:</strong> 12% (1,498)
-                  <div class="progress mt-2" style="height: 25px;">
-                    <div class="progress-bar bg-info" style="width: 12%">12%</div>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <strong>Autres:</strong> 7% (874)
-                  <div class="progress mt-2" style="height: 25px;">
-                    <div class="progress-bar bg-secondary" style="width: 7%">7%</div>
-                  </div>
-                </div>
-              </div>
+            <div class="modal-body">
+              <p>Êtes-vous sûr de vouloir supprimer ce patient ?</p>
+              <p class="text-danger"><small>Cette action est irréversible.</small></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-danger" @click="confirmDelete">Supprimer</button>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <delete></delete>
 </template>
 
 <script>
 const columns = [
   {
-    title: "Statut",
-    key: "status",
-    width: "100px",
-  },
-  {
-    title: "Patient",
-    key: "patient",
+    title: "Nom",
+    dataIndex: "Name",
+    key: "Name",
     sorter: {
       compare: (a, b) => a.name.localeCompare(b.name),
     },
   },
   {
-    title: "Téléphone",
-    key: "phone",
+    title: "Genre",
+    dataIndex: "Gender",
+    key: "Gender",
+    sorter: {
+      compare: (a, b) => {
+        return a.Gender > b.Gender ? -1 : b.Gender > a.Gender ? 1 : 0;
+      },
+    },
   },
   {
-    title: "Cardiologue",
-    key: "cardiologue",
+    title: "Âge",
+    dataIndex: "Age",
     sorter: {
-      compare: (a, b) => a.cardiologue.localeCompare(b.cardiologue),
+      compare: (a, b) => a.Age - b.Age,
+    },
+  },
+  {
+    title: "Téléphone",
+    dataIndex: "Mobile",
+    key: "Mobile",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Mobile.toLowerCase();
+        b = b.Mobile.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Email",
+    dataIndex: "Email",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Email.toLowerCase();
+        b = b.Email.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
     },
   },
   {
     title: "Abonnement",
-    key: "subscription",
+    dataIndex: "Subscription",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Subscription.toLowerCase();
+        b = b.Subscription.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Pathologie",
+    dataIndex: "Condition",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Condition.toLowerCase();
+        b = b.Condition.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Date d'inscription",
+    dataIndex: "JoiningDate",
+    sorter: {
+      compare: (a, b) => {
+        a = a.JoiningDate.toLowerCase();
+        b = b.JoiningDate.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
   },
   {
     title: "",
@@ -453,119 +492,108 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    id: "#12450",
-    name: "Jean Dupont",
-    phone: "+229 97 XX XX XX",
-    cardiologue: "Dr. Kouassi",
-    location: "Cotonou",
-    subscription: "Standard",
-    subscriptionPrice: "3000 F/m",
-    subscriptionColor: "primary",
-    paymentStatus: "Actif",
-    status: "active",
-    image: "avatar-01.jpg",
-  },
-  {
-    id: "#12449",
-    name: "Marie Koffi",
-    phone: "+225 07 XX XX XX",
-    cardiologue: "Dr. Diallo",
-    location: "Abidjan",
-    subscription: "Premium",
-    subscriptionPrice: "5000 F/m",
-    subscriptionColor: "success",
-    paymentStatus: "Actif",
-    status: "alert",
-    image: "avatar-02.jpg",
-  },
-  {
-    id: "#12448",
-    name: "Paul Mensah",
-    phone: "+233 24 XX XX XX",
-    cardiologue: "Dr. Amina",
-    location: "Accra",
-    subscription: "Famille",
-    subscriptionPrice: "8000 F/m",
-    subscriptionColor: "warning",
-    paymentStatus: "Actif",
-    status: "active",
-    image: "avatar-03.jpg",
-  },
-  {
-    id: "#12447",
-    name: "Fatou Diallo",
-    phone: "+221 77 XX XX XX",
-    cardiologue: "Aucun",
-    location: "Dakar",
-    subscription: "Standard",
-    subscriptionPrice: "Suspendu",
-    subscriptionColor: "secondary",
-    paymentStatus: "Impayé",
-    status: "suspended",
-    image: "avatar-04.jpg",
-  },
-  {
-    id: "#12446",
-    name: "Ibrahim Traoré",
-    phone: "+226 70 XX XX XX",
-    cardiologue: "Dr. Kouassi",
-    location: "Ouagadougou",
-    subscription: "Premium",
-    subscriptionPrice: "5000 F/m",
-    subscriptionColor: "success",
-    paymentStatus: "Actif",
-    status: "active",
-    image: "avatar-05.jpg",
-  },
-  {
-    id: "#12445",
-    name: "Aminata Sow",
-    phone: "+221 76 XX XX XX",
-    cardiologue: "Dr. Mensah",
-    location: "Dakar",
-    subscription: "Standard",
-    subscriptionPrice: "3000 F/m",
-    subscriptionColor: "primary",
-    paymentStatus: "Actif",
-    status: "active",
-    image: "avatar-06.jpg",
-  },
-  {
-    id: "#12444",
-    name: "Kofi Asante",
-    phone: "+233 20 XX XX XX",
-    cardiologue: "Dr. Diallo",
-    location: "Kumasi",
-    subscription: "Famille",
-    subscriptionPrice: "8000 F/m",
-    subscriptionColor: "warning",
-    paymentStatus: "Actif",
-    status: "alert",
-    image: "avatar-07.jpg",
-  },
-  {
-    id: "#12443",
-    name: "Aïcha Bah",
-    phone: "+224 62 XX XX XX",
-    cardiologue: "Dr. Amina",
-    location: "Conakry",
-    subscription: "Standard",
-    subscriptionPrice: "3000 F/m",
-    subscriptionColor: "primary",
-    paymentStatus: "Actif",
-    status: "active",
-    image: "avatar-08.jpg",
-  },
-];
-
 export default {
   data() {
     return {
       title: "Patients",
-      text: "Gestion des Patients",
-      data,
+      text: "Liste des Patients",
+      searchQuery: "",
+      isEditMode: false,
+      deleteId: null,
+      formData: {
+        id: null,
+        Name: "",
+        Gender: "",
+        Age: null,
+        Mobile: "",
+        Email: "",
+        Country: "",
+        Subscription: "Standard",
+        Condition: "",
+        Notes: "",
+        JoiningDate: "",
+        Image: "avatar-01.jpg"
+      },
+      data: [
+        {
+          id: 1,
+          Name: "Kofi Mensah",
+          Gender: "Homme",
+          Age: 58,
+          Mobile: "+225 07 45 12 34 56",
+          Email: "kofi.mensah@email.com",
+          Country: "Côte d'Ivoire",
+          Subscription: "Premium",
+          Condition: "Hypertension",
+          JoiningDate: "15/03/2024",
+          Image: "avatar-01.jpg",
+        },
+        {
+          id: 2,
+          Name: "Amina Diallo",
+          Gender: "Femme",
+          Age: 45,
+          Mobile: "+221 77 123 45 67",
+          Email: "amina.diallo@email.com",
+          Country: "Sénégal",
+          Subscription: "Standard",
+          Condition: "Arythmie",
+          JoiningDate: "22/04/2024",
+          Image: "avatar-02.jpg",
+        },
+        {
+          id: 3,
+          Name: "Jean-Pierre Kouassi",
+          Gender: "Homme",
+          Age: 62,
+          Mobile: "+225 05 87 65 43 21",
+          Email: "jp.kouassi@email.com",
+          Country: "Côte d'Ivoire",
+          Subscription: "Famille",
+          Condition: "Insuffisance cardiaque",
+          JoiningDate: "10/02/2024",
+          Image: "avatar-03.jpg",
+        },
+        {
+          id: 4,
+          Name: "Fatou Traoré",
+          Gender: "Femme",
+          Age: 39,
+          Mobile: "+223 76 54 32 10",
+          Email: "fatou.traore@email.com",
+          Country: "Mali",
+          Subscription: "Premium",
+          Condition: "Hypertension",
+          JoiningDate: "05/05/2024",
+          Image: "avatar-04.jpg",
+        },
+        {
+          id: 5,
+          Name: "Ibrahim Cissé",
+          Gender: "Homme",
+          Age: 51,
+          Mobile: "+226 70 12 34 56",
+          Email: "ibrahim.cisse@email.com",
+          Country: "Burkina Faso",
+          Subscription: "Standard",
+          Condition: "Angine",
+          JoiningDate: "18/01/2024",
+          Image: "avatar-05.jpg",
+        },
+        {
+          id: 6,
+          Name: "Marie Koffi",
+          Gender: "Femme",
+          Age: 34,
+          Mobile: "+225 01 98 76 54 32",
+          Email: "marie.koffi@email.com",
+          Country: "Côte d'Ivoire",
+          Subscription: "Essai",
+          Condition: "Autre",
+          JoiningDate: "29/06/2024",
+          Image: "avatar-06.jpg",
+        }
+      ],
       columns,
       searchQuery: "",
       statusFilter: "all",
@@ -581,55 +609,83 @@ export default {
   },
   computed: {
     filteredData() {
-      let filtered = [...this.data];
-
-      // Apply status filter
-      if (this.statusFilter !== "all") {
-        filtered = filtered.filter((p) => p.status === this.statusFilter);
-      }
-
-      // Apply subscription filter
-      if (this.subscriptionFilter !== "all") {
-        filtered = filtered.filter(
-          (p) =>
-            p.subscription.toLowerCase() === this.subscriptionFilter.toLowerCase()
-        );
-      }
-
-      // Apply search filter
-      if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase();
-        filtered = filtered.filter(
-          (p) =>
-            p.id.toLowerCase().includes(query) ||
-            p.name.toLowerCase().includes(query) ||
-            p.phone.includes(query)
-        );
-      }
-
-      return filtered;
-    },
+      if (!this.searchQuery) return this.data;
+      return this.data.filter(p =>
+        p.Name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        p.Email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        p.Mobile.includes(this.searchQuery)
+      );
+    }
   },
   methods: {
-    searchPatients() {
-      // Search is reactive through computed property
+    openAddModal() {
+      this.isEditMode = false;
+      this.resetForm();
+      const modal = new bootstrap.Modal(document.getElementById('patientModal'));
+      modal.show();
     },
-    applyFilters() {
-      // Filters are reactive through computed property
+    openEditModal(patient) {
+      this.isEditMode = true;
+      this.formData = { ...patient };
+      const modal = new bootstrap.Modal(document.getElementById('patientModal'));
+      modal.show();
     },
-    refreshData() {
-      this.$message.success("Données actualisées");
+    resetForm() {
+      this.formData = {
+        id: null,
+        Name: "",
+        Gender: "",
+        Age: null,
+        Mobile: "",
+        Email: "",
+        Country: "",
+        Subscription: "Standard",
+        Condition: "",
+        Notes: "",
+        JoiningDate: "",
+        Image: "avatar-01.jpg"
+      };
     },
-    exportCSV() {
-      this.$message.success("Export CSV en cours...");
+    submitForm() {
+      if (!this.formData.Name || !this.formData.Mobile || !this.formData.Email) {
+        this.$toast.error('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (this.isEditMode) {
+        const index = this.data.findIndex(p => p.id === this.formData.id);
+        if (index !== -1) {
+          this.data[index] = { ...this.formData };
+          this.$toast.success('Patient mis à jour avec succès');
+        }
+      } else {
+        const newPatient = {
+          ...this.formData,
+          id: this.data.length + 1,
+          JoiningDate: new Date().toLocaleDateString('fr-FR')
+        };
+        this.data.push(newPatient);
+        this.$toast.success('Patient ajouté avec succès');
+      }
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('patientModal'));
+      modal.hide();
+      this.resetForm();
     },
-    exportPDF() {
-      this.$message.success("Export PDF en cours...");
+    deletePatient(id) {
+      this.deleteId = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      modal.show();
     },
-    suspendPatient(record) {
-      this.$message.warning(`Patient ${record.name} suspendu`);
-    },
-  },
+    confirmDelete() {
+      this.data = this.data.filter(p => p.id !== this.deleteId);
+      this.$toast.success('Patient supprimé avec succès');
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+      modal.hide();
+      this.deleteId = null;
+    }
+  }
 };
 </script>
 

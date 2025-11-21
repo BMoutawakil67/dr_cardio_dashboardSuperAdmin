@@ -27,15 +27,16 @@
                           </form>
                         </div>
                         <div class="add-group">
-                          <router-link
-                            to="/hospitals/add-hospital"
+                          <button
+                            @click="openAddModal"
                             class="btn btn-primary add-pluss ms-2"
                           >
                             <img src="@/assets/img/icons/plus.svg" alt="" />
-                          </router-link>
+                          </button>
                           <a
                             href="javascript:;"
                             class="btn btn-primary doctor-refresh ms-2"
+                            @click="refreshData"
                           >
                             <img src="@/assets/img/icons/re-fresh.svg" alt="" />
                           </a>
@@ -69,7 +70,7 @@
                     </div>
                     <div class="dash-content dash-count">
                       <h4>Total Hôpitaux</h4>
-                      <h2>28</h2>
+                      <h2>{{ hospitals.length }}</h2>
                       <p><span class="passive-view"><i class="feather-arrow-up-right me-1"></i>5%</span> vs mois dernier</p>
                     </div>
                   </div>
@@ -81,7 +82,7 @@
                     </div>
                     <div class="dash-content dash-count">
                       <h4>Actifs</h4>
-                      <h2>24</h2>
+                      <h2>{{ hospitals.filter(h => h.status === 'Actif').length }}</h2>
                       <p><span class="passive-view"><i class="feather-arrow-up-right me-1"></i>86%</span></p>
                     </div>
                   </div>
@@ -93,7 +94,7 @@
                     </div>
                     <div class="dash-content dash-count">
                       <h4>En négociation</h4>
-                      <h2>3</h2>
+                      <h2>{{ hospitals.filter(h => h.status === 'En négociation').length }}</h2>
                       <p><span class="negative-view"><i class="feather-arrow-down-right me-1"></i>11%</span></p>
                     </div>
                   </div>
@@ -181,12 +182,12 @@
                             ><i class="fa fa-ellipsis-v"></i
                           ></a>
                           <div class="dropdown-menu dropdown-menu-end">
-                            <router-link class="dropdown-item" :to="`/hospitals/hospital-profile?id=${hospital.id}`">
+                            <a class="dropdown-item" href="javascript:;" @click="viewHospital(hospital)">
                               <i class="fa-solid fa-eye m-r-5"></i> Voir
-                            </router-link>
-                            <router-link class="dropdown-item" :to="`/hospitals/edit-hospital?id=${hospital.id}`">
+                            </a>
+                            <a class="dropdown-item" href="javascript:;" @click="openEditModal(hospital)">
                               <i class="fa-solid fa-pen-to-square m-r-5"></i> Éditer
-                            </router-link>
+                            </a>
                             <a class="dropdown-item" href="javascript:;" @click="deleteHospital(hospital.id)">
                               <i class="fa fa-trash-alt m-r-5"></i> Supprimer
                             </a>
@@ -239,6 +240,134 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal Ajouter/Éditer Hôpital -->
+    <div class="modal fade" id="hospitalModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">{{ isEditMode ? 'Éditer l\'hôpital' : 'Ajouter un hôpital' }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <form @submit.prevent="submitForm">
+              <div class="row">
+                <div class="col-12">
+                  <h6 class="mb-3">Informations de l'Hôpital</h6>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Nom de l'établissement <span class="login-danger">*</span></label>
+                    <input class="form-control" type="text" v-model="formData.name" required />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Type d'établissement <span class="login-danger">*</span></label>
+                    <vue-select :options="types" v-model="formData.type" placeholder="Sélectionner" />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="input-block local-forms">
+                    <label>Pays <span class="login-danger">*</span></label>
+                    <vue-select :options="countries" v-model="formData.country" placeholder="Sélectionner" />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="input-block local-forms">
+                    <label>Ville <span class="login-danger">*</span></label>
+                    <input class="form-control" type="text" v-model="formData.city" required />
+                  </div>
+                </div>
+
+                <div class="col-md-4">
+                  <div class="input-block local-forms">
+                    <label>Adresse</label>
+                    <input class="form-control" type="text" v-model="formData.address" />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Email <span class="login-danger">*</span></label>
+                    <input class="form-control" type="email" v-model="formData.email" required />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Téléphone <span class="login-danger">*</span></label>
+                    <input class="form-control" type="text" v-model="formData.phone" required />
+                  </div>
+                </div>
+
+                <div class="col-12">
+                  <h6 class="mb-3 mt-3">Responsable</h6>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Nom du responsable <span class="login-danger">*</span></label>
+                    <input class="form-control" type="text" v-model="formData.responsable" required />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Téléphone du responsable</label>
+                    <input class="form-control" type="text" v-model="formData.responsablePhone" />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Statut <span class="login-danger">*</span></label>
+                    <vue-select :options="statuses" v-model="formData.status" placeholder="Sélectionner" />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="input-block local-forms">
+                    <label>Commission plateforme (%)</label>
+                    <input class="form-control" type="number" min="0" max="100" v-model="formData.commission" />
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-primary" @click="submitForm">
+              {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Confirmation Suppression -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Confirmer la suppression</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer cet hôpital ?</p>
+            <p class="text-danger"><strong>Cette action est irréversible.</strong></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+            <button type="button" class="btn btn-danger" @click="confirmDelete">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -250,9 +379,26 @@ export default {
       title: "Hôpitaux",
       text: "Liste des hôpitaux partenaires",
       searchQuery: "",
+      isEditMode: false,
+      deleteId: null,
       statuses: ["Tous", "Actif", "En négociation", "Inactif"],
+      types: ["Hôpital Public", "CHU", "Clinique Privée", "Centre Médical", "Polyclinique"],
       countries: ["Tous", "Bénin", "Côte d'Ivoire", "Sénégal", "Ghana", "Togo"],
       sortOptions: ["Date d'inscription", "Nom", "Revenus", "Nombre de patients"],
+      formData: {
+        id: null,
+        name: "",
+        type: "",
+        country: "",
+        city: "",
+        address: "",
+        email: "",
+        phone: "",
+        responsable: "",
+        responsablePhone: "",
+        status: "En négociation",
+        commission: 33.33
+      },
       hospitals: [
         {
           id: 1,
@@ -340,11 +486,73 @@ export default {
       };
       return classes[status] || 'custom-badge';
     },
-    deleteHospital(id) {
-      if (confirm('Êtes-vous sûr de vouloir supprimer cet hôpital ?')) {
-        this.hospitals = this.hospitals.filter(h => h.id !== id);
-        this.$toast.success('Hôpital supprimé avec succès');
+    openAddModal() {
+      this.isEditMode = false;
+      this.resetForm();
+      const modal = new bootstrap.Modal(document.getElementById('hospitalModal'));
+      modal.show();
+    },
+    openEditModal(hospital) {
+      this.isEditMode = true;
+      this.formData = { ...hospital };
+      const modal = new bootstrap.Modal(document.getElementById('hospitalModal'));
+      modal.show();
+    },
+    resetForm() {
+      this.formData = {
+        id: null,
+        name: "",
+        type: "",
+        country: "",
+        city: "",
+        address: "",
+        email: "",
+        phone: "",
+        responsable: "",
+        responsablePhone: "",
+        status: "En négociation",
+        commission: 33.33
+      };
+    },
+    submitForm() {
+      if (this.isEditMode) {
+        const index = this.hospitals.findIndex(h => h.id === this.formData.id);
+        if (index !== -1) {
+          this.hospitals[index] = { ...this.formData };
+          this.$toast.success('Hôpital mis à jour avec succès');
+        }
+      } else {
+        const newHospital = {
+          ...this.formData,
+          id: this.hospitals.length + 1,
+          cardiologists: 0,
+          patients: 0,
+          revenue: "0"
+        };
+        this.hospitals.push(newHospital);
+        this.$toast.success('Hôpital ajouté avec succès');
       }
+      const modal = bootstrap.Modal.getInstance(document.getElementById('hospitalModal'));
+      modal.hide();
+      this.resetForm();
+    },
+    deleteHospital(id) {
+      this.deleteId = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      modal.show();
+    },
+    confirmDelete() {
+      this.hospitals = this.hospitals.filter(h => h.id !== this.deleteId);
+      this.$toast.success('Hôpital supprimé avec succès');
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+      modal.hide();
+      this.deleteId = null;
+    },
+    viewHospital(hospital) {
+      this.$router.push(`/hospitals/hospital-profile?id=${hospital.id}`);
+    },
+    refreshData() {
+      this.$toast.info('Actualisation des données...');
     }
   }
 };

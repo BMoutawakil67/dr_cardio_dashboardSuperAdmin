@@ -50,7 +50,7 @@
                 <div class="row align-items-center">
                   <div class="col">
                     <div class="doctor-table-blk">
-                      <h3>Gestion des Cardiologues ({{ totalDoctors }})</h3>
+                      <h3>Liste des Cardiologues</h3>
                       <div class="doctor-search-blk">
                         <div class="top-nav-search table-search-blk">
                           <form @submit.prevent="searchDoctors">
@@ -58,7 +58,8 @@
                               v-model="searchQuery"
                               type="text"
                               class="form-control"
-                              placeholder="Rechercher (nom, hôpital, ville)..."
+                              placeholder="Rechercher cardiologue..."
+                              v-model="searchQuery"
                             />
                             <button type="submit" class="btn">
                               <img src="@/assets/img/icons/search-normal.svg" alt="" />
@@ -66,12 +67,11 @@
                           </form>
                         </div>
                         <div class="add-group">
-                          <router-link
-                            to="add-doctor"
+                          <button
+                            @click="openAddModal"
                             class="btn btn-primary add-pluss ms-2"
-                          >
-                            <img src="@/assets/img/icons/plus.svg" alt="" />
-                          </router-link>
+                            ><img src="@/assets/img/icons/plus.svg" alt=""
+                          /></button>
                           <a
                             href="javascript:;"
                             @click="refreshData"
@@ -188,15 +188,8 @@
                         </router-link>
                       </div>
                     </template>
-
-                    <template v-else-if="column.key === 'patients'">
-                      <div>
-                        <strong>{{ record.patients }}</strong><br />
-                        <small class="text-success">Actifs: {{ record.patientsActifs }}</small><br />
-                        <small class="text-danger" v-if="record.alertes > 0">
-                          Alertes: {{ record.alertes }}
-                        </small>
-                      </div>
+                    <template v-else-if="column.key === 'Mobile'">
+                      <div><a href="javascript:;">{{ record.Mobile }}</a></div>
                     </template>
 
                     <template v-else-if="column.key === 'revenue'">
@@ -231,9 +224,12 @@
                             <i class="fa fa-ellipsis-v"></i>
                           </a>
                           <div class="dropdown-menu dropdown-menu-end">
-                            <router-link
+                            <a
                               class="dropdown-item"
-                              to="/doctors/doctor-profile"
+                              href="javascript:;"
+                              @click="openEditModal(record)"
+                              ><i class="fa-solid fa-pen-to-square m-r-5"></i>
+                              Modifier</a
                             >
                               <i class="fa fa-eye m-r-5"></i> Voir
                             </router-link>
@@ -278,22 +274,8 @@
                             <a
                               class="dropdown-item"
                               href="javascript:;"
-                              @click="sendMessage(record)"
-                            >
-                              <i class="fa fa-envelope m-r-5"></i> Envoyer message
-                            </a>
-                            <a
-                              class="dropdown-item"
-                              href="javascript:;"
-                              @click="suspendDoctor(record)"
-                            >
-                              <i class="fa fa-pause m-r-5"></i> Suspendre
-                            </a>
-                            <a
-                              class="dropdown-item text-danger"
-                              href="javascript:;"
-                              data-bs-toggle="modal"
-                              data-bs-target="#delete_patient"
+                              @click="deleteDoctor(record.id)"
+                              ><i class="fa fa-trash-alt m-r-5"></i> Supprimer</a
                             >
                               <i class="fa fa-trash-alt m-r-5"></i> Supprimer
                             </a>
@@ -309,203 +291,165 @@
         </div>
       </div>
 
-      <!-- Statistics Section -->
-      <div class="row mt-4">
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Répartition par Région</h5>
+      <!-- Modal Ajouter/Éditer Cardiologue -->
+      <div class="modal fade" id="doctorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ isEditMode ? 'Éditer le cardiologue' : 'Nouveau cardiologue' }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="card-body">
-              <div class="mb-2">
-                <strong>Bénin:</strong> 28%
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-success" style="width: 28%">28%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Côte d'Ivoire:</strong> 25%
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-primary" style="width: 25%">25%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Sénégal:</strong> 18%
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-warning" style="width: 18%">18%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Ghana:</strong> 15%
-              </div>
-              <div class="progress mb-3" style="height: 20px;">
-                <div class="progress-bar bg-info" style="width: 15%">15%</div>
-              </div>
-
-              <div class="mb-2">
-                <strong>Autres:</strong> 14%
-              </div>
-              <div class="progress" style="height: 20px;">
-                <div class="progress-bar bg-secondary" style="width: 14%">14%</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header">
-              <h5>Performance</h5>
-            </div>
-            <div class="card-body">
-              <ul class="list-unstyled">
-                <li class="mb-2">
-                  <i class="fa fa-star text-success"></i>
-                  <strong>Très actifs:</strong> 42%
-                </li>
-                <li class="mb-2">
-                  <i class="fa fa-star text-info"></i>
-                  <strong>Actifs:</strong> 45%
-                </li>
-                <li class="mb-2">
-                  <i class="fa fa-star-half text-warning"></i>
-                  <strong>Moyens:</strong> 10%
-                </li>
-                <li class="mb-2">
-                  <i class="fa fa-star-o text-danger"></i>
-                  <strong>Inactifs:</strong> 3%
-                </li>
-                <li class="mt-3">
-                  <i class="fa fa-trophy text-warning"></i>
-                  <strong>Note moyenne:</strong> 4.7⭐
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-md-4">
-          <div class="card">
-            <div class="card-header bg-warning">
-              <h5>
-                <i class="fa fa-exclamation-triangle"></i>
-                Validation en Attente ({{ pendingDoctors }})
-              </h5>
-            </div>
-            <div class="card-body">
-              <p>Profils complets avec diplômes uploadés</p>
-              <p>En attente depuis: 1-5 jours</p>
-              <div class="text-center mt-3">
-                <button
-                  class="btn btn-success btn-sm me-2"
-                  @click="validateAll"
-                >
-                  <i class="fa fa-check"></i> Valider en masse
-                </button>
-                <button
-                  class="btn btn-primary btn-sm"
-                  @click="viewPendingList"
-                >
-                  <i class="fa fa-list"></i> Voir la liste
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Top 5 Cardiologues -->
-      <div class="row mt-4">
-        <div class="col-md-12">
-          <div class="card">
-            <div class="card-header">
-              <h5>
-                <i class="fa fa-trophy text-warning"></i>
-                Top 5 Cardiologues
-              </h5>
-            </div>
-            <div class="card-body">
-              <div class="row">
-                <div class="col-md-2">
-                  <div class="text-center">
-                    <div class="badge bg-warning" style="font-size: 24px; width: 60px; height: 60px; line-height: 60px;">
-                      1
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Nom complet <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.Name"
+                        required
+                      />
                     </div>
-                    <h6 class="mt-2">Dr. Kouassi J.</h6>
-                    <p class="mb-0">214 patients</p>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Spécialité <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Cardiologie générale', 'Électrophysiologie', 'Cardiologie interventionnelle', 'Insuffisance cardiaque', 'Imagerie cardiaque']"
+                        v-model="formData.Specialization"
+                        placeholder="Sélectionner spécialité"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Diplômes</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.Degree"
+                        placeholder="Ex: MD, PhD, FESC"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Téléphone <span class="login-danger">*</span></label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        v-model="formData.Mobile"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Email <span class="login-danger">*</span></label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        v-model="formData.Email"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Pays</label>
+                      <vue-select
+                        :options="['Côte d\'Ivoire', 'Sénégal', 'Mali', 'Burkina Faso', 'Togo', 'Bénin', 'Niger', 'Guinée']"
+                        v-model="formData.Country"
+                        placeholder="Sélectionner pays"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Ville / Hôpital</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.Hospital"
+                        placeholder="Ex: CHU Abidjan"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Années d'expérience</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        v-model="formData.Experience"
+                        min="0"
+                        max="60"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Tarif consultation (FCFA)</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        v-model="formData.ConsultationFee"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Statut</label>
+                      <vue-select
+                        :options="['Actif', 'Inactif', 'En attente']"
+                        v-model="formData.Status"
+                        placeholder="Sélectionner statut"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Bio / Description</label>
+                      <textarea
+                        class="form-control"
+                        v-model="formData.Bio"
+                        rows="3"
+                        placeholder="Courte biographie du cardiologue..."
+                      ></textarea>
+                    </div>
                   </div>
                 </div>
-                <div class="col-md-2">
-                  <div class="text-center">
-                    <div class="badge bg-secondary" style="font-size: 24px; width: 60px; height: 60px; line-height: 60px;">
-                      2
-                    </div>
-                    <h6 class="mt-2">Dr. Diallo A.</h6>
-                    <p class="mb-0">178 patients</p>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="text-center">
-                    <div class="badge" style="background-color: #CD7F32; font-size: 24px; width: 60px; height: 60px; line-height: 60px;">
-                      3
-                    </div>
-                    <h6 class="mt-2">Dr. Traoré F.</h6>
-                    <p class="mb-0">150 patients</p>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="text-center">
-                    <div class="badge bg-info" style="font-size: 24px; width: 60px; height: 60px; line-height: 60px;">
-                      4
-                    </div>
-                    <h6 class="mt-2">Dr. Ndiaye I.</h6>
-                    <p class="mb-0">142 patients</p>
-                  </div>
-                </div>
-                <div class="col-md-2">
-                  <div class="text-center">
-                    <div class="badge bg-primary" style="font-size: 24px; width: 60px; height: 60px; line-height: 60px;">
-                      5
-                    </div>
-                    <h6 class="mt-2">Dr. Mensah P.</h6>
-                    <p class="mb-0">138 patients</p>
-                  </div>
-                </div>
-              </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" @click="submitForm">
+                {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+              </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <delete></delete>
 
-  <!-- QR Code Modal -->
-  <div class="modal fade" id="qrcodeModal" tabindex="-1">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">QR Code Praticien</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-        </div>
-        <div class="modal-body text-center">
-          <div v-if="selectedDoctor">
-            <h6>{{ selectedDoctor.name }}</h6>
-            <div class="qrcode-container mt-3 mb-3">
-              <!-- QR Code would be generated here -->
-              <div style="width: 200px; height: 200px; margin: 0 auto; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center;">
-                QR Code<br />{{ selectedDoctor.id }}
-              </div>
+      <!-- Modal Confirmation Suppression -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmer la suppression</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <button class="btn btn-primary me-2">
-              <i class="fa fa-download"></i> Télécharger QR Code
-            </button>
-            <button class="btn btn-success">
-              <i class="fa fa-file-pdf-o"></i> Télécharger Affiche Cabinet
-            </button>
+            <div class="modal-body">
+              <p>Êtes-vous sûr de vouloir supprimer ce cardiologue ?</p>
+              <p class="text-danger"><small>Cette action est irréversible.</small></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-danger" @click="confirmDelete">Supprimer</button>
+            </div>
           </div>
         </div>
       </div>
@@ -516,27 +460,9 @@
 <script>
 const columns = [
   {
-    title: "Statut",
-    key: "status",
-    width: "100px",
-  },
-  {
-    title: "Cardiologue",
-    key: "cardiologue",
-    sorter: {
-      compare: (a, b) => a.name.localeCompare(b.name),
-    },
-  },
-  {
-    title: "Patients",
-    key: "patients",
-    sorter: {
-      compare: (a, b) => b.patients - a.patients,
-    },
-  },
-  {
-    title: "Revenus",
-    key: "revenue",
+    title: "Nom",
+    dataIndex: "Name",
+    key: "Name",
     sorter: {
       compare: (a, b) => {
         const aRev = parseInt(a.revenue.replace(/,/g, ""));
@@ -546,10 +472,77 @@ const columns = [
     },
   },
   {
-    title: "Note",
-    key: "rating",
+    title: "Spécialité",
+    dataIndex: "Specialization",
     sorter: {
-      compare: (a, b) => (b.rating || 0) - (a.rating || 0),
+      compare: (a, b) => {
+        a = a.Specialization.toLowerCase();
+        b = b.Specialization.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Diplômes",
+    dataIndex: "Degree",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Degree.toLowerCase();
+        b = b.Degree.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Expérience",
+    dataIndex: "Experience",
+    sorter: {
+      compare: (a, b) => a.Experience - b.Experience,
+    },
+  },
+  {
+    title: "Téléphone",
+    dataIndex: "Mobile",
+    key: "Mobile",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Mobile.toLowerCase();
+        b = b.Mobile.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Email",
+    dataIndex: "Email",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Email.toLowerCase();
+        b = b.Email.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Statut",
+    dataIndex: "Status",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Status.toLowerCase();
+        b = b.Status.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Date d'ajout",
+    dataIndex: "JoiningDate",
+    sorter: {
+      compare: (a, b) => {
+        a = a.JoiningDate.toLowerCase();
+        b = b.JoiningDate.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
     },
   },
   {
@@ -560,99 +553,122 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    id: "#847",
-    name: "Dr. Kouassi Jean",
-    location: "Cotonou, Bénin",
-    inscrit: "1 an",
-    patients: 214,
-    patientsActifs: 210,
-    alertes: 4,
-    revenue: "428,000",
-    rating: 4.9,
-    reviews: 125,
-    status: "validated",
-    image: "avatar-01.jpg",
-  },
-  {
-    id: "#846",
-    name: "Dr. Diallo Aminata",
-    location: "Abidjan, CI",
-    inscrit: "1 an",
-    patients: 178,
-    patientsActifs: 175,
-    alertes: 3,
-    revenue: "356,000",
-    rating: 4.8,
-    reviews: 98,
-    status: "validated",
-    image: "avatar-02.jpg",
-  },
-  {
-    id: "#NEW-12",
-    name: "Dr. Mensah Paul",
-    location: "Accra, Ghana",
-    inscrit: "Hier",
-    patients: 0,
-    patientsActifs: 0,
-    alertes: 0,
-    revenue: "0",
-    rating: null,
-    reviews: 0,
-    status: "pending",
-    image: "avatar-03.jpg",
-  },
-  {
-    id: "#845",
-    name: "Dr. Traoré Fatou",
-    location: "Dakar, Sénégal",
-    inscrit: "8 mois",
-    patients: 150,
-    patientsActifs: 148,
-    alertes: 2,
-    revenue: "300,000",
-    rating: 4.7,
-    reviews: 89,
-    status: "validated",
-    image: "avatar-04.jpg",
-  },
-  {
-    id: "#844",
-    name: "Dr. Ndiaye Ibrahima",
-    location: "Dakar, Sénégal",
-    inscrit: "6 mois",
-    patients: 142,
-    patientsActifs: 140,
-    alertes: 2,
-    revenue: "284,000",
-    rating: 4.6,
-    reviews: 76,
-    status: "validated",
-    image: "avatar-05.jpg",
-  },
-  {
-    id: "#NEW-13",
-    name: "Dr. Amina Konate",
-    location: "Cotonou, Bénin",
-    inscrit: "2 jours",
-    patients: 0,
-    patientsActifs: 0,
-    alertes: 0,
-    revenue: "0",
-    rating: null,
-    reviews: 0,
-    status: "pending",
-    image: "avatar-06.jpg",
-  },
-];
-
 export default {
   data() {
     return {
       title: "Cardiologues",
-      text: "Gestion des Cardiologues",
-      data,
+      text: "Liste des Cardiologues",
+      searchQuery: "",
+      isEditMode: false,
+      deleteId: null,
+      formData: {
+        id: null,
+        Name: "",
+        Specialization: "",
+        Degree: "",
+        Mobile: "",
+        Email: "",
+        Country: "",
+        Hospital: "",
+        Experience: null,
+        ConsultationFee: null,
+        Status: "Actif",
+        Bio: "",
+        JoiningDate: "",
+        Image: "avatar-01.jpg"
+      },
+      data: [
+        {
+          id: 1,
+          Name: "Dr. Koffi Adjoumani",
+          Specialization: "Cardiologie interventionnelle",
+          Degree: "MD, FESC",
+          Experience: 15,
+          Mobile: "+225 07 12 34 56 78",
+          Email: "k.adjoumani@cardio.ci",
+          Country: "Côte d'Ivoire",
+          Hospital: "CHU Cocody",
+          ConsultationFee: 25000,
+          Status: "Actif",
+          JoiningDate: "12/01/2023",
+          Image: "avatar-01.jpg",
+        },
+        {
+          id: 2,
+          Name: "Dr. Aminata Sow",
+          Specialization: "Électrophysiologie",
+          Degree: "MD, PhD",
+          Experience: 12,
+          Mobile: "+221 77 987 65 43",
+          Email: "a.sow@cardio.sn",
+          Country: "Sénégal",
+          Hospital: "Hôpital Principal Dakar",
+          ConsultationFee: 30000,
+          Status: "Actif",
+          JoiningDate: "05/03/2023",
+          Image: "avatar-02.jpg",
+        },
+        {
+          id: 3,
+          Name: "Dr. Jean-Marc Touré",
+          Specialization: "Insuffisance cardiaque",
+          Degree: "MD, MSc",
+          Experience: 20,
+          Mobile: "+225 05 45 67 89 01",
+          Email: "jm.toure@cardio.ci",
+          Country: "Côte d'Ivoire",
+          Hospital: "CHU Treichville",
+          ConsultationFee: 28000,
+          Status: "Actif",
+          JoiningDate: "18/02/2023",
+          Image: "avatar-03.jpg",
+        },
+        {
+          id: 4,
+          Name: "Dr. Fatoumata Diarra",
+          Specialization: "Imagerie cardiaque",
+          Degree: "MD",
+          Experience: 8,
+          Mobile: "+223 76 12 34 56",
+          Email: "f.diarra@cardio.ml",
+          Country: "Mali",
+          Hospital: "Hôpital du Point G",
+          ConsultationFee: 22000,
+          Status: "Actif",
+          JoiningDate: "22/04/2023",
+          Image: "avatar-04.jpg",
+        },
+        {
+          id: 5,
+          Name: "Dr. Mamadou Koné",
+          Specialization: "Cardiologie générale",
+          Degree: "MD, FESC",
+          Experience: 18,
+          Mobile: "+226 70 98 76 54",
+          Email: "m.kone@cardio.bf",
+          Country: "Burkina Faso",
+          Hospital: "CHU Yalgado",
+          ConsultationFee: 20000,
+          Status: "Actif",
+          JoiningDate: "10/06/2023",
+          Image: "avatar-05.jpg",
+        },
+        {
+          id: 6,
+          Name: "Dr. Marie Gbagbo",
+          Specialization: "Cardiologie interventionnelle",
+          Degree: "MD, PhD, FESC",
+          Experience: 22,
+          Mobile: "+225 01 23 45 67 89",
+          Email: "m.gbagbo@cardio.ci",
+          Country: "Côte d'Ivoire",
+          Hospital: "Polyclinique Internationale",
+          ConsultationFee: 35000,
+          Status: "Actif",
+          JoiningDate: "15/01/2023",
+          Image: "avatar-06.jpg",
+        }
+      ],
       columns,
       searchQuery: "",
       statusFilter: "all",
@@ -669,77 +685,85 @@ export default {
   },
   computed: {
     filteredData() {
-      let filtered = [...this.data];
-
-      // Apply status filter
-      if (this.statusFilter !== "all") {
-        filtered = filtered.filter((d) => d.status === this.statusFilter);
-      }
-
-      // Apply patient filter
-      if (this.patientFilter === "withPatients") {
-        filtered = filtered.filter((d) => d.patients > 0);
-      } else if (this.patientFilter === "noPatients") {
-        filtered = filtered.filter((d) => d.patients === 0);
-      }
-
-      // Apply search filter
-      if (this.searchQuery) {
-        const query = this.searchQuery.toLowerCase();
-        filtered = filtered.filter(
-          (d) =>
-            d.name.toLowerCase().includes(query) ||
-            d.location.toLowerCase().includes(query)
-        );
-      }
-
-      return filtered;
-    },
+      if (!this.searchQuery) return this.data;
+      return this.data.filter(d =>
+        d.Name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        d.Email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        d.Specialization.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
   },
   methods: {
-    searchDoctors() {
-      // Search is reactive through computed property
-    },
-    applyFilters() {
-      // Filters are reactive through computed property
-    },
-    refreshData() {
-      this.$message.success("Données actualisées");
-    },
-    importCSV() {
-      this.$message.info("Import CSV en cours...");
-    },
-    exportData() {
-      this.$message.success("Export en cours...");
-    },
-    validateDoctor(record) {
-      this.$message.success(`Dr. ${record.name} validé avec succès`);
-    },
-    rejectDoctor(record) {
-      this.$message.error(`Demande de Dr. ${record.name} rejetée`);
-    },
-    viewDocuments(record) {
-      this.$message.info(`Affichage des diplômes de Dr. ${record.name}`);
-    },
-    generateQRCode(record) {
-      this.selectedDoctor = record;
-      // Open modal programmatically
-      const modal = new window.bootstrap.Modal(document.getElementById("qrcodeModal"));
+    openAddModal() {
+      this.isEditMode = false;
+      this.resetForm();
+      const modal = new bootstrap.Modal(document.getElementById('doctorModal'));
       modal.show();
     },
-    sendMessage(record) {
-      this.$message.info(`Envoi de message à Dr. ${record.name}`);
+    openEditModal(doctor) {
+      this.isEditMode = true;
+      this.formData = { ...doctor };
+      const modal = new bootstrap.Modal(document.getElementById('doctorModal'));
+      modal.show();
     },
-    suspendDoctor(record) {
-      this.$message.warning(`Dr. ${record.name} suspendu`);
+    resetForm() {
+      this.formData = {
+        id: null,
+        Name: "",
+        Specialization: "",
+        Degree: "",
+        Mobile: "",
+        Email: "",
+        Country: "",
+        Hospital: "",
+        Experience: null,
+        ConsultationFee: null,
+        Status: "Actif",
+        Bio: "",
+        JoiningDate: "",
+        Image: "avatar-01.jpg"
+      };
     },
-    validateAll() {
-      this.$message.success(`${this.pendingDoctors} cardiologues validés`);
+    submitForm() {
+      if (!this.formData.Name || !this.formData.Mobile || !this.formData.Email) {
+        this.$toast.error('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (this.isEditMode) {
+        const index = this.data.findIndex(d => d.id === this.formData.id);
+        if (index !== -1) {
+          this.data[index] = { ...this.formData };
+          this.$toast.success('Cardiologue mis à jour avec succès');
+        }
+      } else {
+        const newDoctor = {
+          ...this.formData,
+          id: this.data.length + 1,
+          JoiningDate: new Date().toLocaleDateString('fr-FR')
+        };
+        this.data.push(newDoctor);
+        this.$toast.success('Cardiologue ajouté avec succès');
+      }
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('doctorModal'));
+      modal.hide();
+      this.resetForm();
     },
-    viewPendingList() {
-      this.statusFilter = "pending";
+    deleteDoctor(id) {
+      this.deleteId = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      modal.show();
     },
-  },
+    confirmDelete() {
+      this.data = this.data.filter(d => d.id !== this.deleteId);
+      this.$toast.success('Cardiologue supprimé avec succès');
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+      modal.hide();
+      this.deleteId = null;
+    }
+  }
 };
 </script>
 
