@@ -59,7 +59,6 @@
                               type="text"
                               class="form-control"
                               placeholder="Rechercher cardiologue..."
-                              v-model="searchQuery"
                             />
                             <button type="submit" class="btn">
                               <img src="@/assets/img/icons/search-normal.svg" alt="" />
@@ -231,6 +230,10 @@
                               ><i class="fa-solid fa-pen-to-square m-r-5"></i>
                               Modifier</a
                             >
+                            <router-link
+                              class="dropdown-item"
+                              :to="`/doctors/profile/${record.id}`"
+                            >
                               <i class="fa fa-eye m-r-5"></i> Voir
                             </router-link>
                             <router-link
@@ -277,8 +280,6 @@
                               @click="deleteDoctor(record.id)"
                               ><i class="fa fa-trash-alt m-r-5"></i> Supprimer</a
                             >
-                              <i class="fa fa-trash-alt m-r-5"></i> Supprimer
-                            </a>
                           </div>
                         </div>
                       </div>
