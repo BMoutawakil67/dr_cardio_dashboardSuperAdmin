@@ -86,7 +86,7 @@
           <div class="card">
             <div class="card-header">
               <h4 class="card-title">Administrateurs</h4>
-              <button class="btn btn-sm btn-primary">
+              <button class="btn btn-sm btn-primary" @click="openAddModal">
                 <i class="fa fa-plus"></i> Ajouter
               </button>
             </div>
@@ -116,8 +116,9 @@
                       <td>{{ admin.role }}</td>
                       <td>{{ admin.lastLogin }}</td>
                       <td>
-                        <button class="btn btn-sm btn-info me-1"><i class="fa fa-eye"></i></button>
-                        <button class="btn btn-sm btn-warning"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-sm btn-info me-1" @click="viewAdmin(admin.id)"><i class="fa fa-eye"></i></button>
+                        <button class="btn btn-sm btn-warning me-1" @click="openEditModal(admin)"><i class="fa fa-edit"></i></button>
+                        <button class="btn btn-sm btn-danger" @click="deleteAdmin(admin.id)"><i class="fa fa-trash"></i></button>
                       </td>
                     </tr>
                   </tbody>
@@ -149,6 +150,128 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal Ajouter/Éditer Admin -->
+      <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ isEditMode ? 'Éditer l\'administrateur' : 'Nouvel administrateur' }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Nom complet <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.name"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Email <span class="login-danger">*</span></label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        v-model="formData.email"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Rôle <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Super Admin', 'Admin Tech', 'Admin Finance', 'Support', 'Modérateur']"
+                        v-model="formData.role"
+                        placeholder="Sélectionner rôle"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6" v-if="!isEditMode">
+                    <div class="input-block local-forms">
+                      <label>Mot de passe <span class="login-danger">*</span></label>
+                      <input
+                        type="password"
+                        class="form-control"
+                        v-model="formData.password"
+                        :required="!isEditMode"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Permissions</label>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="formData.permissions.users" id="perm1">
+                            <label class="form-check-label" for="perm1">Gestion des utilisateurs</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="formData.permissions.finance" id="perm2">
+                            <label class="form-check-label" for="perm2">Accès finances</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="formData.permissions.content" id="perm3">
+                            <label class="form-check-label" for="perm3">Gestion du contenu</label>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="formData.permissions.security" id="perm4">
+                            <label class="form-check-label" for="perm4">Sécurité & Audit</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="formData.permissions.reports" id="perm5">
+                            <label class="form-check-label" for="perm5">Rapports & Analytics</label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="checkbox" v-model="formData.permissions.settings" id="perm6">
+                            <label class="form-check-label" for="perm6">Paramètres système</label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" @click="submitForm">
+                {{ isEditMode ? 'Mettre à jour' : 'Créer' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Confirmation Suppression -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmer la suppression</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Êtes-vous sûr de vouloir supprimer cet administrateur ?</p>
+              <p class="text-danger"><small>Cette action est irréversible et révoquera tous les accès.</small></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-danger" @click="confirmDelete">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -161,6 +284,25 @@ export default {
       title: "Sécurité & Audit",
       text: "Logs et gestion des accès",
       searchQuery: "",
+      isEditMode: false,
+      deleteId: null,
+      formData: {
+        id: null,
+        name: "",
+        email: "",
+        role: "",
+        password: "",
+        lastLogin: "",
+        online: false,
+        permissions: {
+          users: false,
+          finance: false,
+          content: false,
+          security: false,
+          reports: false,
+          settings: false
+        }
+      },
       logTypes: ["Tous", "Accès", "Paiement", "Erreur", "Alerte"],
       logLevels: ["Tous", "Info", "Warning", "Error", "Critical"],
       logs: [
@@ -169,9 +311,33 @@ export default {
         { id: 3, time: "14:29", type: "Error", user: "System", action: "OCR timeout", result: "Échec", success: false, ip: "Server" }
       ],
       admins: [
-        { id: 1, name: "Super Admin", email: "admin@dc.com", role: "Super Admin", lastLogin: "Maintenant", online: true },
-        { id: 2, name: "Kofi Mensah", email: "tech@dc.com", role: "Admin Tech", lastLogin: "Il y a 1h", online: true },
-        { id: 3, name: "Amina Diallo", email: "support@dc.com", role: "Support", lastLogin: "Il y a 2j", online: false }
+        {
+          id: 1,
+          name: "Super Admin",
+          email: "admin@dc.com",
+          role: "Super Admin",
+          lastLogin: "Maintenant",
+          online: true,
+          permissions: { users: true, finance: true, content: true, security: true, reports: true, settings: true }
+        },
+        {
+          id: 2,
+          name: "Kofi Mensah",
+          email: "tech@dc.com",
+          role: "Admin Tech",
+          lastLogin: "Il y a 1h",
+          online: true,
+          permissions: { users: true, finance: false, content: true, security: true, reports: true, settings: false }
+        },
+        {
+          id: 3,
+          name: "Amina Diallo",
+          email: "support@dc.com",
+          role: "Support",
+          lastLogin: "Il y a 2j",
+          online: false,
+          permissions: { users: true, finance: false, content: true, security: false, reports: false, settings: false }
+        }
       ]
     };
   },
@@ -187,6 +353,89 @@ export default {
     },
     refreshLogs() {
       this.$toast.info('Actualisation des logs...');
+    },
+    openAddModal() {
+      this.isEditMode = false;
+      this.resetForm();
+      const modal = new bootstrap.Modal(document.getElementById('adminModal'));
+      modal.show();
+    },
+    openEditModal(admin) {
+      this.isEditMode = true;
+      this.formData = { ...admin, password: "" };
+      const modal = new bootstrap.Modal(document.getElementById('adminModal'));
+      modal.show();
+    },
+    resetForm() {
+      this.formData = {
+        id: null,
+        name: "",
+        email: "",
+        role: "",
+        password: "",
+        lastLogin: "",
+        online: false,
+        permissions: {
+          users: false,
+          finance: false,
+          content: false,
+          security: false,
+          reports: false,
+          settings: false
+        }
+      };
+    },
+    submitForm() {
+      if (!this.formData.name || !this.formData.email || !this.formData.role) {
+        this.$toast.error('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (!this.isEditMode && !this.formData.password) {
+        this.$toast.error('Le mot de passe est obligatoire pour un nouvel administrateur');
+        return;
+      }
+
+      if (this.isEditMode) {
+        const index = this.admins.findIndex(a => a.id === this.formData.id);
+        if (index !== -1) {
+          this.admins[index] = { ...this.formData };
+          this.$toast.success('Administrateur mis à jour avec succès');
+        }
+      } else {
+        const newAdmin = {
+          ...this.formData,
+          id: this.admins.length + 1,
+          lastLogin: "Jamais",
+          online: false
+        };
+        delete newAdmin.password; // Ne pas stocker le mot de passe en clair
+        this.admins.push(newAdmin);
+        this.$toast.success('Administrateur créé avec succès');
+      }
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('adminModal'));
+      modal.hide();
+      this.resetForm();
+    },
+    deleteAdmin(id) {
+      this.deleteId = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      modal.show();
+    },
+    confirmDelete() {
+      this.admins = this.admins.filter(a => a.id !== this.deleteId);
+      this.$toast.success('Administrateur supprimé avec succès');
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+      modal.hide();
+      this.deleteId = null;
+    },
+    viewAdmin(id) {
+      const admin = this.admins.find(a => a.id === id);
+      if (admin) {
+        this.$toast.info('Affichage des détails de ' + admin.name);
+      }
     }
   }
 };
