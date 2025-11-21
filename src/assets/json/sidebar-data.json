@@ -1,285 +1,263 @@
 [
   {
-    "tittle": "Main",
+    "tittle": "Dashboard DocteurCardio",
     "showAsTab": true,
     "separateRoute": true,
     "menu": [
       {
-        "menuValue": "Dashboard",
-        "hasSubRoute": true,
-        "showSubRoute": true,
-        "image": "menu-icon-01.svg",
-        "active_link": "dashboard",
-        "subMenus": [
-          {
-            "menuValue": "Admin Dashboard",
-            "route": "/dashboard/admin-dashboard",
-            "active_link": "/dashboard/admin-dashboard"
-          },
-          {
-            "menuValue": "Doctor Dashboard",
-            "route": "/dashboard/doctor-dashboard",
-            "active_link": "/dashboard/doctor-dashboard"
-          },
-          {
-            "menuValue": "Patient Dashboard",
-            "route": "/dashboard/patient-dashboard",
-            "active_link": "/dashboard/patient-dashboard"
-          }
-        ]
+        "menuValue": "Accueil",
+        "route": "/dashboard/admin-dashboard",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "icon": "fa-home",
+        "faIcon": true,
+        "active_link": "/dashboard/admin-dashboard",
+        "subMenus": []
       },
       {
-        "menuValue": "Doctors",
+        "menuValue": "Utilisateurs",
         "hasSubRoute": true,
         "showSubRoute": false,
-        "image": "menu-icon-02.svg",
-        "active_link": "doctors",
+        "icon": "fa-users",
+        "faIcon": true,
+        "active_link": "users",
         "subMenus": [
           {
-            "menuValue": "Doctor List",
-            "route": "/doctors/doctors-list",
-            "active_link": "/doctors/doctors-list"
-          },
-          {
-            "menuValue": "Add Doctor",
-            "route": "/doctors/add-doctor",
-            "active_link": "/doctors/add-doctor"
-          },
-          {
-            "menuValue": "Edit Doctor",
-            "route": "/doctors/edit-doctor",
-            "active_link": "/doctors/edit-doctor"
-          },
-          {
-            "menuValue": "Doctor Profile",
-            "route": "/doctors/doctor-profile",
-            "active_link": "/doctors/doctor-profile"
-          }
-        ]
-      },
-      {
-        "menuValue": "Patients",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "image": "menu-icon-03.svg",
-        "active_link": "patients",
-        "subMenus": [
-          {
-            "menuValue": "Patients List",
+            "menuValue": "Patients",
             "route": "/patients/patients-list",
             "active_link": "/patients/patients-list"
           },
           {
-            "menuValue": "Add Patients",
-            "route": "/patients/add-patient",
-            "active_link": "/patients/add-patient"
+            "menuValue": "Cardiologues",
+            "route": "/doctors/doctors-list",
+            "active_link": "/doctors/doctors-list"
           },
           {
-            "menuValue": "Edit Patients",
-            "route": "/patients/edit-patient",
-            "active_link": "/patients/edit-patient"
+            "menuValue": "Hôpitaux",
+            "route": "/hospitals/hospitals-list",
+            "active_link": "/hospitals/hospitals-list"
           },
           {
-            "menuValue": "Patients Profile",
-            "route": "/patients/patient-profile",
-            "active_link": "/patients/patient-profile"
-          }
-        ]
-      },
-      {
-        "menuValue": "Staff",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "image": "menu-icon-08.svg",
-        "active_link": "staff",
-        "subMenus": [
-          {
-            "menuValue": "Staff List",
+            "menuValue": "Administrateurs",
             "route": "/staff/staff-list",
             "active_link": "/staff/staff-list"
-          },
-          {
-            "menuValue": "Add Staff",
-            "route": "/staff/add-staff",
-            "active_link": "/staff/add-staff"
-          },
-          {
-            "menuValue": "Staff Profile",
-            "route": "/staff/staff-profile",
-            "active_link": "/staff/staff-profile"
-          },
-          {
-            "menuValue": "Leaves",
-            "route": "/staff/staff-leave",
-            "active_link": "/staff/staff-leave"
-          },
-          {
-            "menuValue": "Holidays",
-            "route": "/staff/staff-holiday",
-            "active_link": "/staff/staff-holiday"
-          },
-          {
-            "menuValue": "Attendance",
-            "route": "/staff/staff-attendance",
-            "active_link": "/staff/staff-attendance"
           }
         ]
       },
       {
-        "menuValue": "Appointments",
+        "menuValue": "Finance",
         "hasSubRoute": true,
         "showSubRoute": false,
-        "image": "menu-icon-04.svg",
-        "active_link": "appointments",
+        "icon": "fa-money",
+        "faIcon": true,
+        "active_link": "finance",
         "subMenus": [
           {
-            "menuValue": "Appointment List",
-            "route": "/appointments/appointments-list",
-            "active_link": "/appointments/appointments-list"
-          },
-          {
-            "menuValue": "Book Appointment",
-            "route": "/appointments/add-appointment",
-            "active_link": "/appointments/add-appointment"
-          },
-          {
-            "menuValue": "Edit Appointment",
-            "route": "/appointments/edit-appointment",
-            "active_link": "/appointments/edit-appointment"
-          }
-        ]
-      },
-      {
-        "menuValue": "Doctor Schedule",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "image": "menu-icon-05.svg",
-        "active_link": "doctor-schedule",
-        "subMenus": [
-          {
-            "menuValue": "Schedule List",
-            "route": "/doctor-schedule/schedule",
-            "active_link": "/doctor-schedule/schedule"
-          },
-          {
-            "menuValue": "Book Appointment",
-            "route": "/doctor-schedule/add-schedule",
-            "active_link": "/doctor-schedule/add-schedule"
-          },
-          {
-            "menuValue": "Edit Appointment",
-            "route": "/doctor-schedule/edit-schedule",
-            "active_link": "/doctor-schedule/edit-schedule"
-          }
-        ]
-      },
-      {
-        "menuValue": "Departments",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "image": "menu-icon-06.svg",
-        "active_link": "departments",
-        "subMenus": [
-          {
-            "menuValue": "Department List",
-            "route": "/departments/department-list",
-            "active_link": "/departments/department-list"
-          },
-          {
-            "menuValue": "Add Department",
-            "route": "/departments/add-department",
-            "active_link": "/departments/add-department"
-          },
-          {
-            "menuValue": "Edit Department",
-            "route": "/departments/edit-department",
-            "active_link": "/departments/edit-department"
-          }
-        ]
-      },
-      {
-        "menuValue": "Accounts",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "image": "menu-icon-07.svg",
-        "active_link": "accounts",
-        "subMenus": [
-          {
-            "menuValue": "Invoices",
+            "menuValue": "Vue d'ensemble",
             "route": "/accounts/invoices",
             "active_link": "/accounts/invoices"
           },
           {
-            "menuValue": "Payments",
+            "menuValue": "Transactions",
             "route": "/accounts/payments",
             "active_link": "/accounts/payments"
           },
           {
-            "menuValue": "Expenses",
-            "route": "/accounts/expenses",
-            "active_link": "/accounts/expenses"
-          },
-          {
-            "menuValue": "Taxes",
-            "route": "/accounts/taxes",
-            "active_link": "/accounts/taxes"
-          },
-          {
-            "menuValue": "Provident Fund",
+            "menuValue": "Reversements Médecins",
             "route": "/accounts/provident-fund",
             "active_link": "/accounts/provident-fund"
-          }
-        ]
-      },
-      {
-        "menuValue": "Payroll",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "image": "menu-icon-09.svg",
-        "active_link": "payroll",
-        "subMenus": [
-          {
-            "menuValue": "Employee Salary",
-            "route": "/payroll/salary",
-            "active_link": "/payroll/salary"
           },
           {
-            "menuValue": "Payslip",
-            "route": "/payroll/salary-view",
-            "active_link": "/payroll/salary-view"
+            "menuValue": "Réconciliation Financière",
+            "route": "/finance/reconciliation",
+            "active_link": "/finance/reconciliation"
+          },
+          {
+            "menuValue": "Factures",
+            "route": "/invoice/invoices-list",
+            "active_link": "/invoice/invoices-list"
           }
         ]
       },
       {
-        "menuValue": "Chat",
-        "route": "/chat",
+        "menuValue": "Statistiques",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "icon": "fa-bar-chart",
+        "faIcon": true,
+        "active_link": "stats",
+        "subMenus": [
+          {
+            "menuValue": "Global",
+            "route": "/reports/expense-reports",
+            "active_link": "/reports/expense-reports"
+          },
+          {
+            "menuValue": "Croissance",
+            "route": "/reports/invoice-reports",
+            "active_link": "/reports/invoice-reports"
+          },
+          {
+            "menuValue": "Santé Publique",
+            "route": "/analytics/health",
+            "active_link": "/analytics/health"
+          },
+          {
+            "menuValue": "Géographie",
+            "route": "/analytics/geography",
+            "active_link": "/analytics/geography"
+          }
+        ]
+      },
+      {
+        "menuValue": "Communication",
+        "route": "/communication/campaigns",
         "hasSubRoute": false,
         "showSubRoute": false,
-        "image": "menu-icon-10.svg",
-        "active_link": "/chat",
+        "icon": "fa-bullhorn",
+        "faIcon": true,
+        "active_link": "/communication",
         "subMenus": []
       },
       {
-        "menuValue": "Call",
+        "menuValue": "Téléconsultations",
+        "route": "/teleconsultations/monitoring",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "icon": "fa-video-camera",
+        "faIcon": true,
+        "active_link": "/teleconsultations",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Sécurité & Audit",
         "hasSubRoute": true,
         "showSubRoute": false,
-        "image": "menu-icon-11.svg",
-        "active_link": "call",
+        "icon": "fa-shield",
+        "faIcon": true,
+        "active_link": "security",
         "subMenus": [
           {
-            "menuValue": "Voice Call",
-            "route": "/call/voice-call",
-            "active_link": "/call/voice-call"
+            "menuValue": "Logs Système",
+            "route": "/activities/activities",
+            "active_link": "/activities/activities"
           },
           {
-            "menuValue": "Video Call",
-            "route": "/call/video-call",
-            "active_link": "/call/video-call"
+            "menuValue": "Alertes Sécurité",
+            "route": "/security/alerts",
+            "active_link": "/security/alerts"
           },
           {
-            "menuValue": "Incoming Call",
-            "route": "/call/incoming-call",
-            "active_link": "/call//incoming-call"
+            "menuValue": "Gestion Accès",
+            "route": "/security/access",
+            "active_link": "/security/access"
+          },
+          {
+            "menuValue": "Backups",
+            "route": "/security/backup",
+            "active_link": "/security/backup"
+          }
+        ]
+      },
+      {
+        "menuValue": "Support & Tickets",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "icon": "fa-life-ring",
+        "faIcon": true,
+        "active_link": "support",
+        "subMenus": [
+          {
+            "menuValue": "Tickets",
+            "route": "/support/tickets",
+            "active_link": "/support/tickets"
+          },
+          {
+            "menuValue": "Messages",
+            "route": "/chat",
+            "active_link": "/chat"
+          },
+          {
+            "menuValue": "Performance",
+            "route": "/support/performance",
+            "active_link": "/support/performance"
+          }
+        ]
+      },
+      {
+        "menuValue": "Paramètres",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "icon": "fa-cog",
+        "faIcon": true,
+        "active_link": "settings",
+        "subMenus": [
+          {
+            "menuValue": "Général",
+            "route": "/settings/settings",
+            "active_link": "/settings/settings"
+          },
+          {
+            "menuValue": "Abonnements",
+            "route": "/settings/subscriptions",
+            "active_link": "/settings/subscriptions"
+          },
+          {
+            "menuValue": "Paiements",
+            "route": "/settings/payment-settings",
+            "active_link": "/settings/payment-settings"
+          },
+          {
+            "menuValue": "Emails",
+            "route": "/settings/email-settings",
+            "active_link": "/settings/email-settings"
+          },
+          {
+            "menuValue": "Sécurité",
+            "route": "/settings/security",
+            "active_link": "/settings/security"
+          },
+          {
+            "menuValue": "Clés API",
+            "route": "/settings/api",
+            "active_link": "/settings/api"
+          }
+        ]
+      },
+      {
+        "menuValue": "Alertes Critiques",
+        "route": "/alerts/critical",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "icon": "fa-exclamation-triangle",
+        "faIcon": true,
+        "active_link": "/alerts",
+        "subMenus": []
+      }
+    ]
+  },
+  {
+    "tittle": "Outils Avancés",
+    "showAsTab": false,
+    "separateRoute": false,
+    "menu": [
+      {
+        "menuValue": "Rendez-vous",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "icon": "fa-calendar",
+        "faIcon": true,
+        "active_link": "appointments",
+        "subMenus": [
+          {
+            "menuValue": "Liste",
+            "route": "/appointments/appointments-list",
+            "active_link": "/appointments/appointments-list"
+          },
+          {
+            "menuValue": "Planning",
+            "route": "/doctor-schedule/schedule",
+            "active_link": "/doctor-schedule/schedule"
           }
         ]
       },
@@ -287,57 +265,81 @@
         "menuValue": "Email",
         "hasSubRoute": true,
         "showSubRoute": false,
-        "image": "menu-icon-12.svg",
+        "icon": "fa-envelope",
+        "faIcon": true,
         "active_link": "email",
         "subMenus": [
           {
-            "menuValue": "Compose Mail",
+            "menuValue": "Composer",
             "route": "/email/compose",
             "active_link": "/email/compose"
           },
           {
-            "menuValue": "Inbox",
+            "menuValue": "Boîte de réception",
             "route": "/email/inbox",
             "active_link": "/email/inbox"
-          },
-          {
-            "menuValue": "Mail View",
-            "route": "/email/mail-view",
-            "active_link": "/email/mail-view"
           }
         ]
       },
       {
-        "menuValue": "Blog",
+        "menuValue": "Appels",
         "hasSubRoute": true,
         "showSubRoute": false,
-        "image": "menu-icon-13.svg",
-        "active_link": "blog",
+        "icon": "fa-phone",
+        "faIcon": true,
+        "active_link": "call",
         "subMenus": [
           {
-            "menuValue": "Blog",
-            "route": "/blog/blog",
-            "active_link": "/blog/blog"
+            "menuValue": "Appel Vocal",
+            "route": "/call/voice-call",
+            "active_link": "/call/voice-call"
           },
           {
-            "menuValue": "Blog View",
-            "route": "/blog/blog-details",
-            "active_link": "/blog/blog-details"
-          },
-          {
-            "menuValue": "Add Blog",
-            "route": "/blog/add-blog",
-            "active_link": "/blog/add-blog"
-          },
-          {
-            "menuValue": "Edit Blog",
-            "route": "/blog/edit-blog",
-            "active_link": "/blog/blog-blog"
+            "menuValue": "Appel Vidéo",
+            "route": "/call/video-call",
+            "active_link": "/call/video-call"
           }
         ]
       },
       {
-        "menuValue": "Assets",
+        "menuValue": "Calendrier",
+        "route": "/calendar",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "icon": "fa-calendar-alt",
+        "active_link": "/calendar",
+        "faIcon": true,
+        "subMenus": []
+      }
+    ]
+  },
+  {
+    "tittle": "Autres",
+    "showAsTab": false,
+    "separateRoute": false,
+    "menu": [
+      {
+        "menuValue": "Départements",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "icon": "fa-building",
+        "faIcon": true,
+        "active_link": "departments",
+        "subMenus": [
+          {
+            "menuValue": "Liste",
+            "route": "/departments/department-list",
+            "active_link": "/departments/department-list"
+          },
+          {
+            "menuValue": "Ajouter",
+            "route": "/departments/add-department",
+            "active_link": "/departments/add-department"
+          }
+        ]
+      },
+      {
+        "menuValue": "Actifs",
         "route": "/assets/assets-list",
         "hasSubRoute": false,
         "showSubRoute": false,
@@ -347,520 +349,42 @@
         "subMenus": []
       },
       {
-        "menuValue": "Activities",
-        "route": "/activities",
-        "hasSubRoute": false,
-        "showSubRoute": false,
-        "image": "menu-icon-14.svg",
-        "active_link": "/activities",
-        "subMenus": []
-      },
-      {
-        "menuValue": "Reports",
+        "menuValue": "Blog",
         "hasSubRoute": true,
         "showSubRoute": false,
-        "image": "menu-icon-02.svg",
-        "active_link": "reports",
+        "icon": "fa-file-text",
+        "faIcon": true,
+        "active_link": "blog",
         "subMenus": [
           {
-            "menuValue": "Expense Report",
-            "route": "/reports/expense-reports",
-            "active_link": "/reports/expense-reports"
+            "menuValue": "Articles",
+            "route": "/blog/blog",
+            "active_link": "/blog/blog"
           },
           {
-            "menuValue": "Invoice Report",
-            "route": "/reports/invoice-reports",
-            "active_link": "/reports/invoice-reports"
+            "menuValue": "Ajouter",
+            "route": "/blog/add-blog",
+            "active_link": "/blog/add-blog"
           }
         ]
       },
       {
-        "menuValue": "Invoice",
+        "menuValue": "Paie",
         "hasSubRoute": true,
         "showSubRoute": false,
-        "image": "menu-icon-15.svg",
-        "active_link": "invoice",
+        "icon": "fa-dollar",
+        "faIcon": true,
+        "active_link": "payroll",
         "subMenus": [
           {
-            "menuValue": "Invoices List",
-            "route": "/invoice/invoices-list",
-            "active_link": "/invoice/invoices-list"
+            "menuValue": "Salaires",
+            "route": "/payroll/salary",
+            "active_link": "/payroll/salary"
           },
           {
-            "menuValue": "Invoice Grid",
-            "route": "/invoice/invoices-grid",
-            "active_link": "/invoice/invoices-grid"
-          },
-          {
-            "menuValue": "Add Invoices",
-            "route": "/invoice/add-invoice",
-            "active_link": "/invoice/add-invoice"
-          },
-          {
-            "menuValue": "Edit Invoices",
-            "route": "/invoice/edit-invoices",
-            "active_link": "/invoice/edit-invoices"
-          },
-          {
-            "menuValue": "Invoices Details",
-            "route": "/invoice/view-invoice",
-            "active_link": "/invoice/view-invoices"
-          },
-          {
-            "menuValue": "Invoices Settings",
-            "route": "/invoice/invoices-settings",
-            "active_link": "/invoice/invoices-settings"
-          }
-        ]
-      },
-      {
-        "menuValue": "Settings",
-        "route": "/settings/settings",
-        "hasSubRoute": false,
-        "showSubRoute": false,
-        "active_link": "/settings",
-        "image": "menu-icon-16.svg",
-        "subMenus": []
-      }
-    ]
-  },
-  {
-    "tittle": "UI Elements",
-    "showAsTab": false,
-    "separateRoute": false,
-    "menu": [
-      {
-        "menuValue": "Base UI",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "icon": "fa fa-laptop",
-        "faIcon": true,
-        "active_link": "baseui",
-        "subMenus": [
-          {
-            "menuValue": "Alerts",
-            "route": "/baseui/alerts",
-            "active_link": "/baseui/alerts"
-          },
-          {
-            "menuValue": "Accordions",
-            "route": "/baseui/accordions",
-            "active_link": "/baseui/accordions"
-          },
-          {
-            "menuValue": "Avatar",
-            "route": "/baseui/avatar",
-            "active_link": "/baseui/avatar"
-          },
-          {
-            "menuValue": "Badges",
-            "route": "/baseui/badges",
-            "active_link": "/baseui/badges"
-          },
-          {
-            "menuValue": "Buttons",
-            "route": "/baseui/buttons",
-            "active_link": "/baseui/buttons"
-          },
-          {
-            "menuValue": "Button Group",
-            "route": "/baseui/buttongroup",
-            "active_link": "/baseui/buttongroup"
-          },
-          {
-            "menuValue": "Breadcrumbs",
-            "route": "/baseui/breadcrumbs",
-            "active_link": "/baseui/breadcrumbs"
-          },
-          {
-            "menuValue": "Cards",
-            "route": "/baseui/cards",
-            "active_link": "/baseui/cards"
-          },
-          {
-            "menuValue": "Carousel",
-            "route": "/baseui/carousel",
-            "active_link": "/baseui/carousel"
-          },
-          {
-            "menuValue": "Dropdowns",
-            "route": "/baseui/dropdowns",
-            "active_link": "/baseui/dropdowns"
-          },
-          {
-            "menuValue": "Grid",
-            "route": "/baseui/grid",
-            "active_link": "/baseui/grid"
-          },
-          {
-            "menuValue": "Images",
-            "route": "/baseui/images",
-            "active_link": "/baseui/images"
-          },
-          {
-            "menuValue": "Lightbox",
-            "route": "/baseui/lightbox",
-            "active_link": "/baseui/lightbox"
-          },
-          {
-            "menuValue": "Media",
-            "route": "/baseui/media",
-            "active_link": "/baseui/media"
-          },
-          {
-            "menuValue": "Modals",
-            "route": "/baseui/modals",
-            "active_link": "/baseui/modals"
-          },
-          {
-            "menuValue": "Offcanvas",
-            "route": "/baseui/offcanvas",
-            "active_link": "/baseui/offcanvas"
-          },
-          {
-            "menuValue": "Pagination",
-            "route": "/baseui/pagination",
-            "active_link": "/baseui/pagination"
-          },
-          {
-            "menuValue": "Popover",
-            "route": "/baseui/popover",
-            "active_link": "/baseui/popover"
-          },
-          {
-            "menuValue": "Progress",
-            "route": "/baseui/progress",
-            "active_link": "/baseui/progress"
-          },
-          {
-            "menuValue": "Placeholders",
-            "route": "/baseui/placeholders",
-            "active_link": "/baseui/placeholders"
-          },
-          {
-            "menuValue": "Range Slider",
-            "route": "/baseui/rangeslider",
-            "active_link": "/baseui/rangeslider"
-          },
-          {
-            "menuValue": "Spinners",
-            "route": "/baseui/spinners",
-            "active_link": "/baseui/spinners"
-          },
-          {
-            "menuValue": "Sweet Alerts",
-            "route": "/baseui/sweetalerts",
-            "active_link": "/baseui/sweetalerts"
-          },
-          {
-            "menuValue": "Tab",
-            "route": "/baseui/tab",
-            "active_link": "/baseui/tab"
-          },
-          {
-            "menuValue": "Toastr",
-            "route": "/baseui/toastr",
-            "active_link": "/baseui/toastr"
-          },
-          {
-            "menuValue": "Tooltip",
-            "route": "/baseui/tooltip",
-            "active_link": "/baseui/tooltip"
-          },
-          {
-            "menuValue": "Typography",
-            "route": "/baseui/typography",
-            "active_link": "/typography"
-          },
-          {
-            "menuValue": "Video",
-            "route": "/baseui/video",
-            "active_link": "/baseui/video"
-          }
-        ]
-      },
-      {
-        "menuValue": "Elements",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "icon": "fa fa-box",
-        "faIcon": true,
-        "active_link": "elements",
-        "subMenus": [
-          {
-            "menuValue": "Ribbon",
-            "route": "/elements/ribbon",
-            "active_link": "/elements/ribbon"
-          },
-          {
-            "menuValue": "Clipboard",
-            "route": "/elements/clipboard",
-            "active_link": "/elements/clipboard"
-          },
-          {
-            "menuValue": "Drag & Drop",
-            "route": "/elements/drag-drop",
-            "active_link": "/elements/drag-drop"
-          },
-          {
-            "menuValue": "Rating",
-            "route": "/elements/rating",
-            "active_link": "/elements/rating"
-          },
-          {
-            "menuValue": "Text Editor",
-            "route": "/elements/text-editor",
-            "active_link": "/elements/text-editor"
-          },
-          {
-            "menuValue": "Counter",
-            "route": "/elements/counter",
-            "active_link": "/elements/counter"
-          },
-          {
-            "menuValue": "Scrollbar",
-            "route": "/elements/scrollbar",
-            "active_link": "/elements/scrollbar"
-          },
-          {
-            "menuValue": "Notification",
-            "route": "/elements/notification",
-            "active_link": "/elements/notification"
-          },
-          {
-            "menuValue": "Sticky Note",
-            "route": "/elements/stickynote",
-            "active_link": "/elements/stickynote"
-          },
-          {
-            "menuValue": "Timeline",
-            "route": "/elements/timeline",
-            "active_link": "/elements/timeline"
-          },
-          {
-            "menuValue": "Horizontal Timeline",
-            "route": "/elements/horizontal-timeline",
-            "active_link": "/elements/horizontal-timeline"
-          },
-          {
-            "menuValue": "Form Wizard",
-            "route": "/elements/form-wizard",
-            "active_link": "/elements/form-wizard"
-          }
-        ]
-      },
-      {
-        "menuValue": "Charts",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "icon": "fa fa-chart-simple",
-        "faIcon": true,
-        "active_link": "charts",
-        "subMenus": [
-          {
-            "menuValue": "Apex Charts",
-            "route": "/charts/chart-apex",
-            "active_link": "/charts/chart-apex"
-          },
-          {
-            "menuValue": "Chart Js",
-            "route": "/charts/chart-js",
-            "active_link": "/charts/chart-js"
-          },
-          {
-            "menuValue": "Morris Charts",
-            "route": "/charts/chart-morris",
-            "active_link": "/charts/chart-morris"
-          },
-          {
-            "menuValue": "Flot Charts",
-            "route": "/charts/chart-flot",
-            "active_link": "/charts/chart-flot"
-          },
-          {
-            "menuValue": "C3 Charts",
-            "route": "/charts/chart-c3",
-            "active_link": "/charts/chart-c3"
-          }
-        ]
-      },
-      {
-        "menuValue": "Icons",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "icon": "fa fa-award",
-        "faIcon": true,
-        "active_link": "icons",
-        "subMenus": [
-          {
-            "menuValue": "Fontawesome Icons",
-            "route": "/icons/icon-fontawesome",
-            "active_link": "/icons/icon-fontawesome"
-          },
-          {
-            "menuValue": "Feather Icons",
-            "route": "/icons/icon-feather",
-            "active_link": "/icons/icon-feather"
-          },
-          {
-            "menuValue": "Ionic Icons",
-            "route": "/icons/icon-ionic",
-            "active_link": "/icons/icon-ionic"
-          },
-          {
-            "menuValue": "Material Icons",
-            "route": "/icons/icon-material",
-            "active_link": "/icons/icon-material"
-          },
-          {
-            "menuValue": "Pe7 Icons",
-            "route": "/icons/icon-pe7",
-            "active_link": "/icons/icon-pe7"
-          },
-          {
-            "menuValue": "Simpleline Icons",
-            "route": "/icons/icon-simpleline",
-            "active_link": "/icons/icon-simpleline"
-          },
-          {
-            "menuValue": "Themify Icons",
-            "route": "/icons/icon-themify",
-            "active_link": "/icons/icon-themify"
-          },
-          {
-            "menuValue": "Weather Icons",
-            "route": "/icons/icon-weather",
-            "active_link": "/icons/icon-weather"
-          },
-          {
-            "menuValue": "Typicon Icons",
-            "route": "/icons/icon-typicon",
-            "active_link": "/icons/icon-typicon"
-          },
-          {
-            "menuValue": "Flag Icons",
-            "route": "/icons/icon-flag",
-            "active_link": "/icons/icon-typflagicon"
-          }
-        ]
-      },
-      {
-        "menuValue": "Forms",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "icon": "fa-edit",
-        "faIcon": true,
-        "active_link": "forms",
-        "subMenus": [
-          {
-            "menuValue": "Basic Inputs",
-            "route": "/forms/form-basic-inputs",
-            "active_link": "/forms/form-basic-inputs"
-          },
-          {
-            "menuValue": "Input Groups",
-            "route": "/forms/form-input-groups",
-            "active_link": "/forms/form-input-groups"
-          },
-          {
-            "menuValue": "Horizontal Form",
-            "route": "/forms/form-horizontal",
-            "active_link": "/forms/form-horizontal"
-          },
-          {
-            "menuValue": "Vertical Form",
-            "route": "/forms/form-vertical",
-            "active_link": "/forms/form-vertical"
-          }
-        ]
-      },
-      {
-        "menuValue": "Tables",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "icon": "fa-table",
-        "active_link": "tables",
-        "faIcon": true,
-        "subMenus": [
-          {
-            "menuValue": "Basic Tables",
-            "route": "/tables/tables-basic",
-            "active_link": "/tables/tables-basic"
-          },
-          {
-            "menuValue": "Data Table",
-            "route": "/tables/tables-datatables",
-            "active_link": "/tables/tables-datatables"
-          }
-        ]
-      },
-      {
-        "menuValue": "Calendar",
-        "route": "/calendar",
-        "hasSubRoute": false,
-        "showSubRoute": false,
-        "icon": "fa-calendar",
-        "active_link": "/calendar",
-        "faIcon": true,
-        "subMenus": []
-      }
-    ]
-  },
-  {
-    "tittle": "Extras",
-    "showAsTab": false,
-    "separateRoute": false,
-    "menu": [
-      {
-        "menuValue": "Pages",
-        "hasSubRoute": true,
-        "showSubRoute": false,
-        "base2": "profile",
-        "icon": "fa-columns",
-        "faIcon": true,
-        "subMenus": [
-          {
-            "menuValue": "Login",
-            "route": "/"
-          },
-          {
-            "menuValue": "Register",
-            "route": "/register"
-          },
-          {
-            "menuValue": "Forgot Password",
-            "route": "/forgot-password"
-          },
-          {
-            "menuValue": "Change Password",
-            "route": "/change-password2"
-          },
-          {
-            "menuValue": "Lock Screen",
-            "route": "/lock-screen"
-          },
-          {
-            "menuValue": "Profile",
-            "route": "/profile",
-            "active_link": "/profile"
-          },
-          {
-            "menuValue": "Gallery",
-            "route": "/gallery",
-            "active_link": "/gallery"
-          },
-          {
-            "menuValue": "404 Error",
-            "route": "/error-404"
-          },
-          {
-            "menuValue": "500 Error",
-            "route": "/error-500"
-          },
-          {
-            "menuValue": "Blank Page",
-            "route": "/blank-page",
-            "active_link": "/blank-page"
+            "menuValue": "Bulletins",
+            "route": "/payroll/salary-view",
+            "active_link": "/payroll/salary-view"
           }
         ]
       }
