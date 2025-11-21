@@ -27,12 +27,12 @@
                           </form>
                         </div>
                         <div class="add-group">
-                          <router-link
-                            to="/marketing/create-campaign"
+                          <button
+                            @click="openAddModal"
                             class="btn btn-primary add-pluss ms-2"
                           >
                             <img src="@/assets/img/icons/plus.svg" alt="" /> Nouvelle Campagne
-                          </router-link>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -182,6 +182,9 @@
                             <a class="dropdown-item" href="javascript:;" @click="viewCampaign(campaign.id)">
                               <i class="fa-solid fa-eye m-r-5"></i> Voir détails
                             </a>
+                            <a class="dropdown-item" href="javascript:;" @click="openEditModal(campaign)">
+                              <i class="fa-solid fa-pen-to-square m-r-5"></i> Modifier
+                            </a>
                             <a class="dropdown-item" href="javascript:;" @click="duplicateCampaign(campaign.id)">
                               <i class="fa-solid fa-copy m-r-5"></i> Dupliquer
                             </a>
@@ -218,6 +221,123 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal Ajouter/Éditer Campagne -->
+      <div class="modal fade" id="campaignModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ isEditMode ? 'Éditer la campagne' : 'Nouvelle campagne' }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Nom de la campagne <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.name"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Type <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Email', 'Push', 'SMS', 'In-App']"
+                        v-model="formData.type"
+                        placeholder="Sélectionner type"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Audience cible <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Tous patients', 'Premium', 'Standard', 'Cardiologues']"
+                        v-model="formData.audience"
+                        placeholder="Sélectionner audience"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Statut <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Brouillon', 'Programmé', 'En cours', 'Envoyé']"
+                        v-model="formData.status"
+                        placeholder="Sélectionner statut"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Objet / Titre <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.subject"
+                        placeholder="Objet du message"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Message <span class="login-danger">*</span></label>
+                      <textarea
+                        class="form-control"
+                        v-model="formData.message"
+                        rows="4"
+                        placeholder="Contenu du message"
+                      ></textarea>
+                    </div>
+                  </div>
+                  <div class="col-md-6" v-if="formData.status === 'Programmé'">
+                    <div class="input-block local-forms">
+                      <label>Date d'envoi</label>
+                      <input
+                        type="date"
+                        class="form-control"
+                        v-model="formData.date"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" @click="submitForm">
+                {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Confirmation Suppression -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmer la suppression</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Êtes-vous sûr de vouloir supprimer cette campagne ?</p>
+              <p class="text-danger"><small>Cette action est irréversible.</small></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-danger" @click="confirmDelete">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -230,6 +350,23 @@ export default {
       title: "Communication & Marketing",
       text: "Liste des campagnes",
       searchQuery: "",
+      isEditMode: false,
+      deleteId: null,
+      formData: {
+        id: null,
+        name: "",
+        type: "",
+        audience: "",
+        subject: "",
+        message: "",
+        status: "Brouillon",
+        date: "",
+        sent: 0,
+        opened: 0,
+        openRate: 0,
+        clicks: 0,
+        clickRate: 0
+      },
       statuses: ["Tous", "Envoyé", "Programmé", "Brouillon", "En cours"],
       types: ["Tous", "Email", "Push", "SMS", "In-App"],
       audiences: ["Tous", "Patients", "Cardiologues", "Premium", "Standard"],
@@ -360,18 +497,94 @@ export default {
       };
       return classes[status] || 'custom-badge';
     },
+    openAddModal() {
+      this.isEditMode = false;
+      this.resetForm();
+      const modal = new bootstrap.Modal(document.getElementById('campaignModal'));
+      modal.show();
+    },
+    openEditModal(campaign) {
+      this.isEditMode = true;
+      this.formData = { ...campaign };
+      const modal = new bootstrap.Modal(document.getElementById('campaignModal'));
+      modal.show();
+    },
+    resetForm() {
+      this.formData = {
+        id: null,
+        name: "",
+        type: "",
+        audience: "",
+        subject: "",
+        message: "",
+        status: "Brouillon",
+        date: "",
+        sent: 0,
+        opened: 0,
+        openRate: 0,
+        clicks: 0,
+        clickRate: 0
+      };
+    },
+    submitForm() {
+      if (!this.formData.name || !this.formData.type || !this.formData.audience) {
+        this.$toast.error('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (this.isEditMode) {
+        const index = this.campaigns.findIndex(c => c.id === this.formData.id);
+        if (index !== -1) {
+          this.campaigns[index] = { ...this.formData };
+          this.$toast.success('Campagne mise à jour avec succès');
+        }
+      } else {
+        const newCampaign = {
+          ...this.formData,
+          id: this.campaigns.length + 1,
+          date: new Date().toLocaleDateString('fr-FR')
+        };
+        this.campaigns.push(newCampaign);
+        this.$toast.success('Campagne créée avec succès');
+      }
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('campaignModal'));
+      modal.hide();
+      this.resetForm();
+    },
+    deleteCampaign(id) {
+      this.deleteId = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      modal.show();
+    },
+    confirmDelete() {
+      this.campaigns = this.campaigns.filter(c => c.id !== this.deleteId);
+      this.$toast.success('Campagne supprimée avec succès');
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+      modal.hide();
+      this.deleteId = null;
+    },
     viewCampaign(id) {
       console.log("Voir campagne ID:", id);
       this.$toast.info("Affichage des détails de la campagne");
     },
     duplicateCampaign(id) {
-      console.log("Dupliquer campagne ID:", id);
-      this.$toast.success("Campagne dupliquée avec succès");
-    },
-    deleteCampaign(id) {
-      if (confirm('Êtes-vous sûr de vouloir supprimer cette campagne ?')) {
-        this.campaigns = this.campaigns.filter(c => c.id !== id);
-        this.$toast.success('Campagne supprimée avec succès');
+      const campaign = this.campaigns.find(c => c.id === id);
+      if (campaign) {
+        const duplicated = {
+          ...campaign,
+          id: this.campaigns.length + 1,
+          name: campaign.name + " (Copie)",
+          status: "Brouillon",
+          sent: 0,
+          opened: 0,
+          openRate: 0,
+          clicks: 0,
+          clickRate: 0
+        };
+        this.campaigns.push(duplicated);
+        this.$toast.success("Campagne dupliquée avec succès");
       }
     }
   }
