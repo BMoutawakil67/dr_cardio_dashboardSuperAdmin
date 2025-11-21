@@ -14,14 +14,15 @@
                 <div class="row align-items-center">
                   <div class="col">
                     <div class="doctor-table-blk">
-                      <h3>Doctors List</h3>
+                      <h3>Liste des Cardiologues</h3>
                       <div class="doctor-search-blk">
                         <div class="top-nav-search table-search-blk">
                           <form>
                             <input
                               type="text"
                               class="form-control"
-                              placeholder="Search here"
+                              placeholder="Rechercher cardiologue..."
+                              v-model="searchQuery"
                             />
                             <a class="btn"
                               ><img src="@/assets/img/icons/search-normal.svg" alt=""
@@ -29,11 +30,11 @@
                           </form>
                         </div>
                         <div class="add-group">
-                          <router-link
-                            to="add-doctor"
+                          <button
+                            @click="openAddModal"
                             class="btn btn-primary add-pluss ms-2"
                             ><img src="@/assets/img/icons/plus.svg" alt=""
-                          /></router-link>
+                          /></button>
                           <a
                             href="javascript:;"
                             class="btn btn-primary doctor-refresh ms-2"
@@ -65,7 +66,7 @@
                 <a-table
                   class="table border-0 custom-table comman-table datatable mb-0"
                   :columns="columns"
-                  :data-source="data"
+                  :data-source="filteredData"
                   :row-selection="{}"
                 >
                   <template #bodyCell="{ column, record }">
@@ -84,7 +85,7 @@
                       </div>
                     </template>
                     <template v-else-if="column.key === 'Mobile'">
-                      <div><a href="javascript:;">+1 23 456890</a></div>
+                      <div><a href="javascript:;">{{ record.Mobile }}</a></div>
                     </template>
                     <template v-else-if="column.key === 'action'">
                       <div class="text-end">
@@ -97,16 +98,18 @@
                             ><i class="fa fa-ellipsis-v"></i
                           ></a>
                           <div class="dropdown-menu dropdown-menu-end">
-                            <router-link class="dropdown-item" to="/doctors/edit-doctor"
+                            <a
+                              class="dropdown-item"
+                              href="javascript:;"
+                              @click="openEditModal(record)"
                               ><i class="fa-solid fa-pen-to-square m-r-5"></i>
-                              Edit</router-link
+                              Modifier</a
                             >
                             <a
                               class="dropdown-item"
                               href="javascript:;"
-                              data-bs-toggle="modal"
-                              data-bs-target="#delete_patient"
-                              ><i class="fa fa-trash-alt m-r-5"></i> Delete</a
+                              @click="deleteDoctor(record.id)"
+                              ><i class="fa fa-trash-alt m-r-5"></i> Supprimer</a
                             >
                           </div>
                         </div>
@@ -119,14 +122,176 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal Ajouter/Éditer Cardiologue -->
+      <div class="modal fade" id="doctorModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">{{ isEditMode ? 'Éditer le cardiologue' : 'Nouveau cardiologue' }}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <form @submit.prevent="submitForm">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Nom complet <span class="login-danger">*</span></label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.Name"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Spécialité <span class="login-danger">*</span></label>
+                      <vue-select
+                        :options="['Cardiologie générale', 'Électrophysiologie', 'Cardiologie interventionnelle', 'Insuffisance cardiaque', 'Imagerie cardiaque']"
+                        v-model="formData.Specialization"
+                        placeholder="Sélectionner spécialité"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Diplômes</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.Degree"
+                        placeholder="Ex: MD, PhD, FESC"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Téléphone <span class="login-danger">*</span></label>
+                      <input
+                        type="tel"
+                        class="form-control"
+                        v-model="formData.Mobile"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Email <span class="login-danger">*</span></label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        v-model="formData.Email"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Pays</label>
+                      <vue-select
+                        :options="['Côte d\'Ivoire', 'Sénégal', 'Mali', 'Burkina Faso', 'Togo', 'Bénin', 'Niger', 'Guinée']"
+                        v-model="formData.Country"
+                        placeholder="Sélectionner pays"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Ville / Hôpital</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        v-model="formData.Hospital"
+                        placeholder="Ex: CHU Abidjan"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Années d'expérience</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        v-model="formData.Experience"
+                        min="0"
+                        max="60"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Tarif consultation (FCFA)</label>
+                      <input
+                        type="number"
+                        class="form-control"
+                        v-model="formData.ConsultationFee"
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div class="input-block local-forms">
+                      <label>Statut</label>
+                      <vue-select
+                        :options="['Actif', 'Inactif', 'En attente']"
+                        v-model="formData.Status"
+                        placeholder="Sélectionner statut"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-md-12">
+                    <div class="input-block local-forms">
+                      <label>Bio / Description</label>
+                      <textarea
+                        class="form-control"
+                        v-model="formData.Bio"
+                        rows="3"
+                        placeholder="Courte biographie du cardiologue..."
+                      ></textarea>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-primary" @click="submitForm">
+                {{ isEditMode ? 'Mettre à jour' : 'Enregistrer' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Confirmation Suppression -->
+      <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Confirmer la suppression</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>Êtes-vous sûr de vouloir supprimer ce cardiologue ?</p>
+              <p class="text-danger"><small>Cette action est irréversible.</small></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+              <button type="button" class="btn btn-danger" @click="confirmDelete">Supprimer</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <delete></delete>
 </template>
 <script>
 const columns = [
   {
-    title: "Name",
+    title: "Nom",
     dataIndex: "Name",
     key: "Name",
     sorter: {
@@ -138,19 +303,7 @@ const columns = [
     },
   },
   {
-    title: "Department",
-    dataIndex: "Department",
-    key: "Department",
-    sorter: {
-      compare: (a, b) => {
-        a = a.Department.toLowerCase();
-        b = b.Department.toLowerCase();
-        return a > b ? -1 : b > a ? 1 : 0;
-      },
-    },
-  },
-  {
-    title: "Specialization",
+    title: "Spécialité",
     dataIndex: "Specialization",
     sorter: {
       compare: (a, b) => {
@@ -161,7 +314,7 @@ const columns = [
     },
   },
   {
-    title: "Degree",
+    title: "Diplômes",
     dataIndex: "Degree",
     sorter: {
       compare: (a, b) => {
@@ -172,7 +325,14 @@ const columns = [
     },
   },
   {
-    title: "Mobile",
+    title: "Expérience",
+    dataIndex: "Experience",
+    sorter: {
+      compare: (a, b) => a.Experience - b.Experience,
+    },
+  },
+  {
+    title: "Téléphone",
     dataIndex: "Mobile",
     key: "Mobile",
     sorter: {
@@ -195,7 +355,18 @@ const columns = [
     },
   },
   {
-    title: "Joining Date",
+    title: "Statut",
+    dataIndex: "Status",
+    sorter: {
+      compare: (a, b) => {
+        a = a.Status.toLowerCase();
+        b = b.Status.toLowerCase();
+        return a > b ? -1 : b > a ? 1 : 0;
+      },
+    },
+  },
+  {
+    title: "Date d'ajout",
     dataIndex: "JoiningDate",
     sorter: {
       compare: (a, b) => {
@@ -213,96 +384,205 @@ const columns = [
   },
 ];
 
-const data = [
-  {
-    Name: "Andrea Lalema",
-    Department: "Otolaryngology",
-    Specialization: "Infertility",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-01.jpg",
-  },
-  {
-    Name: "Dr.Smith Bruklin",
-    Department: "Urology",
-    Specialization: "Prostate",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-02.jpg",
-  },
-  {
-    Name: "Dr.William Stephin",
-    Department: "Radiology",
-    Specialization: "Cancer",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-03.jpg",
-  },
-  {
-    Name: "Bernardo James",
-    Department: "Dentist",
-    Specialization: "Prostate",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-04.jpg",
-  },
-  {
-    Name: "Cristina Groves",
-    Department: "Gynocolgy",
-    Specialization: "Prostate",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-06.jpg",
-  },
-  {
-    Name: "Mark Hay Smith",
-    Department: "Gynocolgy",
-    Specialization: "Prostate",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-05.jpg",
-  },
-  {
-    Name: "Andrea Lalema",
-    Department: "Otolaryngology",
-    Specialization: "Infertility",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-01.jpg",
-  },
-  {
-    Name: "Dr.Smith Bruklin",
-    Department: "Urology",
-    Specialization: "Prostate",
-    Degree: "MBBS, MS",
-    Mobile: "+1 23 456890",
-    Email: "example@email.com",
-    JoiningDate: "01.10.2022",
-    Image: "avatar-02.jpg",
-  },
-];
 export default {
   data() {
     return {
-      title: "Doctors",
-      text: "Doctors List",
-      data,
+      title: "Cardiologues",
+      text: "Liste des Cardiologues",
+      searchQuery: "",
+      isEditMode: false,
+      deleteId: null,
+      formData: {
+        id: null,
+        Name: "",
+        Specialization: "",
+        Degree: "",
+        Mobile: "",
+        Email: "",
+        Country: "",
+        Hospital: "",
+        Experience: null,
+        ConsultationFee: null,
+        Status: "Actif",
+        Bio: "",
+        JoiningDate: "",
+        Image: "avatar-01.jpg"
+      },
+      data: [
+        {
+          id: 1,
+          Name: "Dr. Koffi Adjoumani",
+          Specialization: "Cardiologie interventionnelle",
+          Degree: "MD, FESC",
+          Experience: 15,
+          Mobile: "+225 07 12 34 56 78",
+          Email: "k.adjoumani@cardio.ci",
+          Country: "Côte d'Ivoire",
+          Hospital: "CHU Cocody",
+          ConsultationFee: 25000,
+          Status: "Actif",
+          JoiningDate: "12/01/2023",
+          Image: "avatar-01.jpg",
+        },
+        {
+          id: 2,
+          Name: "Dr. Aminata Sow",
+          Specialization: "Électrophysiologie",
+          Degree: "MD, PhD",
+          Experience: 12,
+          Mobile: "+221 77 987 65 43",
+          Email: "a.sow@cardio.sn",
+          Country: "Sénégal",
+          Hospital: "Hôpital Principal Dakar",
+          ConsultationFee: 30000,
+          Status: "Actif",
+          JoiningDate: "05/03/2023",
+          Image: "avatar-02.jpg",
+        },
+        {
+          id: 3,
+          Name: "Dr. Jean-Marc Touré",
+          Specialization: "Insuffisance cardiaque",
+          Degree: "MD, MSc",
+          Experience: 20,
+          Mobile: "+225 05 45 67 89 01",
+          Email: "jm.toure@cardio.ci",
+          Country: "Côte d'Ivoire",
+          Hospital: "CHU Treichville",
+          ConsultationFee: 28000,
+          Status: "Actif",
+          JoiningDate: "18/02/2023",
+          Image: "avatar-03.jpg",
+        },
+        {
+          id: 4,
+          Name: "Dr. Fatoumata Diarra",
+          Specialization: "Imagerie cardiaque",
+          Degree: "MD",
+          Experience: 8,
+          Mobile: "+223 76 12 34 56",
+          Email: "f.diarra@cardio.ml",
+          Country: "Mali",
+          Hospital: "Hôpital du Point G",
+          ConsultationFee: 22000,
+          Status: "Actif",
+          JoiningDate: "22/04/2023",
+          Image: "avatar-04.jpg",
+        },
+        {
+          id: 5,
+          Name: "Dr. Mamadou Koné",
+          Specialization: "Cardiologie générale",
+          Degree: "MD, FESC",
+          Experience: 18,
+          Mobile: "+226 70 98 76 54",
+          Email: "m.kone@cardio.bf",
+          Country: "Burkina Faso",
+          Hospital: "CHU Yalgado",
+          ConsultationFee: 20000,
+          Status: "Actif",
+          JoiningDate: "10/06/2023",
+          Image: "avatar-05.jpg",
+        },
+        {
+          id: 6,
+          Name: "Dr. Marie Gbagbo",
+          Specialization: "Cardiologie interventionnelle",
+          Degree: "MD, PhD, FESC",
+          Experience: 22,
+          Mobile: "+225 01 23 45 67 89",
+          Email: "m.gbagbo@cardio.ci",
+          Country: "Côte d'Ivoire",
+          Hospital: "Polyclinique Internationale",
+          ConsultationFee: 35000,
+          Status: "Actif",
+          JoiningDate: "15/01/2023",
+          Image: "avatar-06.jpg",
+        }
+      ],
       columns,
     };
   },
+  computed: {
+    filteredData() {
+      if (!this.searchQuery) return this.data;
+      return this.data.filter(d =>
+        d.Name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        d.Email.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        d.Specialization.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    }
+  },
+  methods: {
+    openAddModal() {
+      this.isEditMode = false;
+      this.resetForm();
+      const modal = new bootstrap.Modal(document.getElementById('doctorModal'));
+      modal.show();
+    },
+    openEditModal(doctor) {
+      this.isEditMode = true;
+      this.formData = { ...doctor };
+      const modal = new bootstrap.Modal(document.getElementById('doctorModal'));
+      modal.show();
+    },
+    resetForm() {
+      this.formData = {
+        id: null,
+        Name: "",
+        Specialization: "",
+        Degree: "",
+        Mobile: "",
+        Email: "",
+        Country: "",
+        Hospital: "",
+        Experience: null,
+        ConsultationFee: null,
+        Status: "Actif",
+        Bio: "",
+        JoiningDate: "",
+        Image: "avatar-01.jpg"
+      };
+    },
+    submitForm() {
+      if (!this.formData.Name || !this.formData.Mobile || !this.formData.Email) {
+        this.$toast.error('Veuillez remplir tous les champs obligatoires');
+        return;
+      }
+
+      if (this.isEditMode) {
+        const index = this.data.findIndex(d => d.id === this.formData.id);
+        if (index !== -1) {
+          this.data[index] = { ...this.formData };
+          this.$toast.success('Cardiologue mis à jour avec succès');
+        }
+      } else {
+        const newDoctor = {
+          ...this.formData,
+          id: this.data.length + 1,
+          JoiningDate: new Date().toLocaleDateString('fr-FR')
+        };
+        this.data.push(newDoctor);
+        this.$toast.success('Cardiologue ajouté avec succès');
+      }
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('doctorModal'));
+      modal.hide();
+      this.resetForm();
+    },
+    deleteDoctor(id) {
+      this.deleteId = id;
+      const modal = new bootstrap.Modal(document.getElementById('deleteModal'));
+      modal.show();
+    },
+    confirmDelete() {
+      this.data = this.data.filter(d => d.id !== this.deleteId);
+      this.$toast.success('Cardiologue supprimé avec succès');
+
+      const modal = bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+      modal.hide();
+      this.deleteId = null;
+    }
+  }
 };
 </script>
