@@ -193,6 +193,32 @@ import Error_404 from '@/views/pages/pages/error-404.vue'
 import Blank_Page from '@/views/pages/pages/blank-page.vue'
 import InvoiceView from '@/views/pages/accounts/invoice-view.vue'
 
+// Nouvelles pages DocteurCardio
+import Hospitals from '@/views/pages/hospitals/hospitals.vue'
+import HospitalsList from '@/views/pages/hospitals/hospitals-list.vue'
+import AddHospital from '@/views/pages/hospitals/add-hospital.vue'
+import EditHospital from '@/views/pages/hospitals/edit-hospital.vue'
+import HospitalProfile from '@/views/pages/hospitals/hospital-profile.vue'
+
+import Marketing from '@/views/pages/marketing/marketing.vue'
+import CampaignsList from '@/views/pages/marketing/campaigns-list.vue'
+import CreateCampaign from '@/views/pages/marketing/create-campaign.vue'
+
+import FinancialReconciliation from '@/views/pages/financial-reconciliation/financial-reconciliation.vue'
+import ReconciliationDashboard from '@/views/pages/financial-reconciliation/reconciliation-dashboard.vue'
+
+import TeleconsultationMonitoring from '@/views/pages/teleconsultation-monitoring/teleconsultation-monitoring.vue'
+import MonitoringDashboard from '@/views/pages/teleconsultation-monitoring/monitoring-dashboard.vue'
+
+import Analytics from '@/views/pages/analytics/analytics.vue'
+import AnalyticsDashboard from '@/views/pages/analytics/analytics-dashboard.vue'
+
+import Security from '@/views/pages/security/security.vue'
+import SecurityAudit from '@/views/pages/security/security-audit.vue'
+
+import SupportTickets from '@/views/pages/support-tickets/support-tickets.vue'
+import TicketsList from '@/views/pages/support-tickets/tickets-list.vue'
+
 const routes = [
   {
     path: '/',
@@ -575,6 +601,66 @@ const routes = [
     {path: '', redirect: '/reports/expense-reports'},
     {path: 'expense-reports', component: Expense_Reports },
     {path: 'invoice-reports', component: Invoice_Reports },
+  ]
+ },
+ {
+  path: '/hospitals',
+  component: Hospitals,
+  children: [
+    {path: '', redirect: '/hospitals/hospitals-list'},
+    {path: 'hospitals-list', component: HospitalsList},
+    {path: 'add-hospital', component: AddHospital},
+    {path: 'edit-hospital', component: EditHospital},
+    {path: 'hospital-profile', component: HospitalProfile}
+  ]
+ },
+ {
+  path: '/marketing',
+  component: Marketing,
+  children: [
+    {path: '', redirect: '/marketing/campaigns-list'},
+    {path: 'campaigns-list', component: CampaignsList},
+    {path: 'create-campaign', component: CreateCampaign}
+  ]
+ },
+ {
+  path: '/financial-reconciliation',
+  component: FinancialReconciliation,
+  children: [
+    {path: '', redirect: '/financial-reconciliation/dashboard'},
+    {path: 'dashboard', component: ReconciliationDashboard}
+  ]
+ },
+ {
+  path: '/teleconsultation-monitoring',
+  component: TeleconsultationMonitoring,
+  children: [
+    {path: '', redirect: '/teleconsultation-monitoring/dashboard'},
+    {path: 'dashboard', component: MonitoringDashboard}
+  ]
+ },
+ {
+  path: '/analytics',
+  component: Analytics,
+  children: [
+    {path: '', redirect: '/analytics/dashboard'},
+    {path: 'dashboard', component: AnalyticsDashboard}
+  ]
+ },
+ {
+  path: '/security',
+  component: Security,
+  children: [
+    {path: '', redirect: '/security/audit'},
+    {path: 'audit', component: SecurityAudit}
+  ]
+ },
+ {
+  path: '/support',
+  component: SupportTickets,
+  children: [
+    {path: '', redirect: '/support/tickets-list'},
+    {path: 'tickets-list', component: TicketsList}
   ]
  }
 ];
