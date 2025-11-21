@@ -1,10 +1,15 @@
 [
   {
+<<<<<<< HEAD
     "tittle": "Dashboard DocteurCardio",
+=======
+    "tittle": "Menu Principal",
+>>>>>>> afbd9611d6c1ad974e34b6d06c22aef1d735d782
     "showAsTab": true,
     "separateRoute": true,
     "menu": [
       {
+<<<<<<< HEAD
         "menuValue": "Accueil",
         "route": "/dashboard/admin-dashboard",
         "hasSubRoute": false,
@@ -24,10 +29,30 @@
         "subMenus": [
           {
             "menuValue": "Patients",
+=======
+        "menuValue": "Dashboard",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-01.svg",
+        "route": "/dashboard/admin-dashboard",
+        "active_link": "/dashboard",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Patients",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-03.svg",
+        "active_link": "patients",
+        "subMenus": [
+          {
+            "menuValue": "Liste des patients",
+>>>>>>> afbd9611d6c1ad974e34b6d06c22aef1d735d782
             "route": "/patients/patients-list",
             "active_link": "/patients/patients-list"
           },
           {
+<<<<<<< HEAD
             "menuValue": "Cardiologues",
             "route": "/doctors/doctors-list",
             "active_link": "/doctors/doctors-list"
@@ -41,16 +66,108 @@
             "menuValue": "Administrateurs",
             "route": "/staff/staff-list",
             "active_link": "/staff/staff-list"
+=======
+            "menuValue": "Ajouter patient",
+            "route": "/patients/add-patient",
+            "active_link": "/patients/add-patient"
+          },
+          {
+            "menuValue": "Profil patient",
+            "route": "/patients/patient-profile",
+            "active_link": "/patients/patient-profile"
           }
         ]
       },
       {
+        "menuValue": "Cardiologues",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-02.svg",
+        "active_link": "doctors",
+        "subMenus": [
+          {
+            "menuValue": "Liste des cardiologues",
+            "route": "/doctors/doctors-list",
+            "active_link": "/doctors/doctors-list"
+          },
+          {
+            "menuValue": "Ajouter cardiologue",
+            "route": "/doctors/add-doctor",
+            "active_link": "/doctors/add-doctor"
+          },
+          {
+            "menuValue": "Profil cardiologue",
+            "route": "/doctors/doctor-profile",
+            "active_link": "/doctors/doctor-profile"
+>>>>>>> afbd9611d6c1ad974e34b6d06c22aef1d735d782
+          }
+        ]
+      },
+      {
+<<<<<<< HEAD
         "menuValue": "Finance",
         "hasSubRoute": true,
         "showSubRoute": false,
         "icon": "fa-money",
         "faIcon": true,
         "active_link": "finance",
+=======
+        "menuValue": "Hôpitaux",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-06.svg",
+        "active_link": "hospitals",
+        "subMenus": [
+          {
+            "menuValue": "Liste des hôpitaux",
+            "route": "/hospitals/hospitals-list",
+            "active_link": "/hospitals/hospitals-list"
+          },
+          {
+            "menuValue": "Ajouter hôpital",
+            "route": "/hospitals/add-hospital",
+            "active_link": "/hospitals/add-hospital"
+          },
+          {
+            "menuValue": "Profil hôpital",
+            "route": "/hospitals/hospital-profile",
+            "active_link": "/hospitals/hospital-profile"
+          }
+        ]
+      },
+      {
+        "menuValue": "Communication & Marketing",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-12.svg",
+        "active_link": "marketing",
+        "subMenus": [
+          {
+            "menuValue": "Campagnes",
+            "route": "/marketing/campaigns-list",
+            "active_link": "/marketing/campaigns-list"
+          },
+          {
+            "menuValue": "Créer campagne",
+            "route": "/marketing/create-campaign",
+            "active_link": "/marketing/create-campaign"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "tittle": "Finance",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Revenus & Finances",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-07.svg",
+        "active_link": "accounts",
+>>>>>>> afbd9611d6c1ad974e34b6d06c22aef1d735d782
         "subMenus": [
           {
             "menuValue": "Vue d'ensemble",
@@ -63,6 +180,7 @@
             "active_link": "/accounts/payments"
           },
           {
+<<<<<<< HEAD
             "menuValue": "Reversements Médecins",
             "route": "/accounts/provident-fund",
             "active_link": "/accounts/provident-fund"
@@ -389,5 +507,83 @@
         ]
       }
     ]
+=======
+            "menuValue": "Reversements",
+            "route": "/accounts/expenses",
+            "active_link": "/accounts/expenses"
+          }
+        ]
+      },
+      {
+        "menuValue": "Réconciliation Financière",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-15.svg",
+        "route": "/financial-reconciliation/dashboard",
+        "active_link": "/financial-reconciliation",
+        "subMenus": []
+      }
+    ]
+  },
+  {
+    "tittle": "Monitoring & Analytics",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Analytics & Statistiques",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-02.svg",
+        "route": "/analytics/dashboard",
+        "active_link": "/analytics",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Monitoring Téléconsultations",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-11.svg",
+        "route": "/teleconsultation-monitoring/dashboard",
+        "active_link": "/teleconsultation-monitoring",
+        "subMenus": []
+      }
+    ]
+  },
+  {
+    "tittle": "Administration",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Sécurité & Audit",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "icon": "fa-shield",
+        "faIcon": true,
+        "route": "/security/audit",
+        "active_link": "/security",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Support & Tickets",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-10.svg",
+        "route": "/support/tickets-list",
+        "active_link": "/support",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Paramètres",
+        "route": "/settings/settings",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "active_link": "/settings",
+        "image": "menu-icon-16.svg",
+        "subMenus": []
+      }
+    ]
+>>>>>>> afbd9611d6c1ad974e34b6d06c22aef1d735d782
   }
 ]
