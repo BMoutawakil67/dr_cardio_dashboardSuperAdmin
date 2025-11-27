@@ -1,0 +1,139 @@
+[
+  {
+    "tittle": "Menu Principal",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Tableau de bord",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-01.svg",
+        "route": "/dashboard/admin-dashboard",
+        "active_link": "/dashboard",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Patients",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-03.svg",
+        "route": "/patients/patients-list",
+        "active_link": "/patients",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Cardiologues",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-02.svg",
+        "route": "/doctors/doctors-list",
+        "active_link": "/doctors",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Hôpitaux",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-06.svg",
+        "route": "/hospitals/hospitals-list",
+        "active_link": "/hospitals",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Communication & Marketing",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-12.svg",
+        "route": "/marketing/campaigns-list",
+        "active_link": "/marketing",
+        "subMenus": []
+      }
+    ]
+  },
+  {
+    "tittle": "Finance",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Revenus & Finances",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-07.svg",
+        "route": "/accounts/invoices",
+        "active_link": "/accounts",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Réconciliation Financière",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-15.svg",
+        "route": "/financial-reconciliation/dashboard",
+        "active_link": "/financial-reconciliation",
+        "subMenus": []
+      }
+    ]
+  },
+  {
+    "tittle": "Monitoring & Analytics",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Analytics & Statistiques",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-02.svg",
+        "route": "/analytics/dashboard",
+        "active_link": "/analytics",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Monitoring Téléconsultations",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-11.svg",
+        "route": "/teleconsultation-monitoring/dashboard",
+        "active_link": "/teleconsultation-monitoring",
+        "subMenus": []
+      }
+    ]
+  },
+  {
+    "tittle": "Administration",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Sécurité & Audit",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "icon": "fa-shield",
+        "faIcon": true,
+        "route": "/security/audit",
+        "active_link": "/security",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Support & Tickets",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-10.svg",
+        "route": "/support/tickets-list",
+        "active_link": "/support",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Paramètres",
+        "route": "/settings/settings",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "active_link": "/settings",
+        "image": "menu-icon-16.svg",
+        "subMenus": []
+      }
+    ]
+  }
+]

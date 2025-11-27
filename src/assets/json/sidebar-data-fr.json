@@ -1,0 +1,427 @@
+[
+  {
+    "tittle": "Principal",
+    "showAsTab": true,
+    "separateRoute": true,
+    "menu": [
+      {
+        "menuValue": "Tableau de Bord",
+        "hasSubRoute": true,
+        "showSubRoute": true,
+        "image": "menu-icon-01.svg",
+        "active_link": "dashboard",
+        "subMenus": [
+          {
+            "menuValue": "Tableau de Bord Admin",
+            "route": "/dashboard/admin-dashboard",
+            "active_link": "/dashboard/admin-dashboard"
+          },
+          {
+            "menuValue": "Tableau de Bord Médecin",
+            "route": "/dashboard/doctor-dashboard",
+            "active_link": "/dashboard/doctor-dashboard"
+          },
+          {
+            "menuValue": "Tableau de Bord Patient",
+            "route": "/dashboard/patient-dashboard",
+            "active_link": "/dashboard/patient-dashboard"
+          }
+        ]
+      },
+      {
+        "menuValue": "Médecins",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-02.svg",
+        "active_link": "doctors",
+        "subMenus": [
+          {
+            "menuValue": "Liste des Médecins",
+            "route": "/doctors/doctors-list",
+            "active_link": "/doctors/doctors-list"
+          },
+          {
+            "menuValue": "Ajouter un Médecin",
+            "route": "/doctors/add-doctor",
+            "active_link": "/doctors/add-doctor"
+          },
+          {
+            "menuValue": "Modifier un Médecin",
+            "route": "/doctors/edit-doctor",
+            "active_link": "/doctors/edit-doctor"
+          },
+          {
+            "menuValue": "Profil du Médecin",
+            "route": "/doctors/doctor-profile",
+            "active_link": "/doctors/doctor-profile"
+          }
+        ]
+      },
+      {
+        "menuValue": "Patients",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-03.svg",
+        "active_link": "patients",
+        "subMenus": [
+          {
+            "menuValue": "Liste des Patients",
+            "route": "/patients/patients-list",
+            "active_link": "/patients/patients-list"
+          },
+          {
+            "menuValue": "Ajouter un Patient",
+            "route": "/patients/add-patient",
+            "active_link": "/patients/add-patient"
+          },
+          {
+            "menuValue": "Modifier un Patient",
+            "route": "/patients/edit-patient",
+            "active_link": "/patients/edit-patient"
+          },
+          {
+            "menuValue": "Profil du Patient",
+            "route": "/patients/patient-profile",
+            "active_link": "/patients/patient-profile"
+          }
+        ]
+      },
+      {
+        "menuValue": "Personnel",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-08.svg",
+        "active_link": "staff",
+        "subMenus": [
+          {
+            "menuValue": "Liste du Personnel",
+            "route": "/staff/staff-list",
+            "active_link": "/staff/staff-list"
+          },
+          {
+            "menuValue": "Ajouter du Personnel",
+            "route": "/staff/add-staff",
+            "active_link": "/staff/add-staff"
+          },
+          {
+            "menuValue": "Profil du Personnel",
+            "route": "/staff/staff-profile",
+            "active_link": "/staff/staff-profile"
+          },
+          {
+            "menuValue": "Congés",
+            "route": "/staff/staff-leave",
+            "active_link": "/staff/staff-leave"
+          },
+          {
+            "menuValue": "Jours Fériés",
+            "route": "/staff/staff-holiday",
+            "active_link": "/staff/staff-holiday"
+          },
+          {
+            "menuValue": "Présence",
+            "route": "/staff/staff-attendance",
+            "active_link": "/staff/staff-attendance"
+          }
+        ]
+      },
+      {
+        "menuValue": "Rendez-vous",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-04.svg",
+        "active_link": "appointments",
+        "subMenus": [
+          {
+            "menuValue": "Liste des Rendez-vous",
+            "route": "/appointments/appointments-list",
+            "active_link": "/appointments/appointments-list"
+          },
+          {
+            "menuValue": "Réserver un Rendez-vous",
+            "route": "/appointments/add-appointment",
+            "active_link": "/appointments/add-appointment"
+          },
+          {
+            "menuValue": "Modifier un Rendez-vous",
+            "route": "/appointments/edit-appointment",
+            "active_link": "/appointments/edit-appointment"
+          }
+        ]
+      },
+      {
+        "menuValue": "Planning Médecin",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-05.svg",
+        "active_link": "doctor-schedule",
+        "subMenus": [
+          {
+            "menuValue": "Liste des Plannings",
+            "route": "/doctor-schedule/schedule",
+            "active_link": "/doctor-schedule/schedule"
+          },
+          {
+            "menuValue": "Ajouter un Planning",
+            "route": "/doctor-schedule/add-schedule",
+            "active_link": "/doctor-schedule/add-schedule"
+          },
+          {
+            "menuValue": "Modifier un Planning",
+            "route": "/doctor-schedule/edit-schedule",
+            "active_link": "/doctor-schedule/edit-schedule"
+          }
+        ]
+      },
+      {
+        "menuValue": "Départements",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-06.svg",
+        "active_link": "departments",
+        "subMenus": [
+          {
+            "menuValue": "Liste des Départements",
+            "route": "/departments/department-list",
+            "active_link": "/departments/department-list"
+          },
+          {
+            "menuValue": "Ajouter un Département",
+            "route": "/departments/add-department",
+            "active_link": "/departments/add-department"
+          },
+          {
+            "menuValue": "Modifier un Département",
+            "route": "/departments/edit-department",
+            "active_link": "/departments/edit-department"
+          }
+        ]
+      },
+      {
+        "menuValue": "Comptes",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-07.svg",
+        "active_link": "accounts",
+        "subMenus": [
+          {
+            "menuValue": "Factures",
+            "route": "/accounts/invoices",
+            "active_link": "/accounts/invoices"
+          },
+          {
+            "menuValue": "Paiements",
+            "route": "/accounts/payments",
+            "active_link": "/accounts/payments"
+          },
+          {
+            "menuValue": "Dépenses",
+            "route": "/accounts/expenses",
+            "active_link": "/accounts/expenses"
+          },
+          {
+            "menuValue": "Taxes",
+            "route": "/accounts/taxes",
+            "active_link": "/accounts/taxes"
+          },
+          {
+            "menuValue": "Fonds de Prévoyance",
+            "route": "/accounts/provident-fund",
+            "active_link": "/accounts/provident-fund"
+          }
+        ]
+      },
+      {
+        "menuValue": "Paie",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-09.svg",
+        "active_link": "payroll",
+        "subMenus": [
+          {
+            "menuValue": "Salaire des Employés",
+            "route": "/payroll/salary",
+            "active_link": "/payroll/salary"
+          },
+          {
+            "menuValue": "Fiche de Paie",
+            "route": "/payroll/salary-view",
+            "active_link": "/payroll/salary-view"
+          }
+        ]
+      },
+      {
+        "menuValue": "Chat",
+        "route": "/chat",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-10.svg",
+        "active_link": "/chat",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Appels",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-11.svg",
+        "active_link": "call",
+        "subMenus": [
+          {
+            "menuValue": "Appel Vocal",
+            "route": "/call/voice-call",
+            "active_link": "/call/voice-call"
+          },
+          {
+            "menuValue": "Appel Vidéo",
+            "route": "/call/video-call",
+            "active_link": "/call/video-call"
+          },
+          {
+            "menuValue": "Appel Entrant",
+            "route": "/call/incoming-call",
+            "active_link": "/call//incoming-call"
+          }
+        ]
+      },
+      {
+        "menuValue": "Email",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-12.svg",
+        "active_link": "email",
+        "subMenus": [
+          {
+            "menuValue": "Composer un Email",
+            "route": "/email/compose",
+            "active_link": "/email/compose"
+          },
+          {
+            "menuValue": "Boîte de Réception",
+            "route": "/email/inbox",
+            "active_link": "/email/inbox"
+          },
+          {
+            "menuValue": "Voir l'Email",
+            "route": "/email/mail-view",
+            "active_link": "/email/mail-view"
+          }
+        ]
+      },
+      {
+        "menuValue": "Blog",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-13.svg",
+        "active_link": "blog",
+        "subMenus": [
+          {
+            "menuValue": "Blog",
+            "route": "/blog/blog",
+            "active_link": "/blog/blog"
+          },
+          {
+            "menuValue": "Voir le Blog",
+            "route": "/blog/blog-details",
+            "active_link": "/blog/blog-details"
+          },
+          {
+            "menuValue": "Ajouter un Blog",
+            "route": "/blog/add-blog",
+            "active_link": "/blog/add-blog"
+          },
+          {
+            "menuValue": "Modifier un Blog",
+            "route": "/blog/edit-blog",
+            "active_link": "/blog/blog-blog"
+          }
+        ]
+      },
+      {
+        "menuValue": "Actifs",
+        "route": "/assets/assets-list",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "icon": "fa-cube",
+        "faIcon": true,
+        "active_link": "/assets/assets-list",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Activités",
+        "route": "/activities",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "image": "menu-icon-14.svg",
+        "active_link": "/activities",
+        "subMenus": []
+      },
+      {
+        "menuValue": "Rapports",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-02.svg",
+        "active_link": "reports",
+        "subMenus": [
+          {
+            "menuValue": "Rapport de Dépenses",
+            "route": "/reports/expense-reports",
+            "active_link": "/reports/expense-reports"
+          },
+          {
+            "menuValue": "Rapport de Factures",
+            "route": "/reports/invoice-reports",
+            "active_link": "/reports/invoice-reports"
+          }
+        ]
+      },
+      {
+        "menuValue": "Factures",
+        "hasSubRoute": true,
+        "showSubRoute": false,
+        "image": "menu-icon-15.svg",
+        "active_link": "invoice",
+        "subMenus": [
+          {
+            "menuValue": "Liste des Factures",
+            "route": "/invoice/invoices-list",
+            "active_link": "/invoice/invoices-list"
+          },
+          {
+            "menuValue": "Grille de Factures",
+            "route": "/invoice/invoices-grid",
+            "active_link": "/invoice/invoices-grid"
+          },
+          {
+            "menuValue": "Ajouter une Facture",
+            "route": "/invoice/add-invoice",
+            "active_link": "/invoice/add-invoice"
+          },
+          {
+            "menuValue": "Modifier une Facture",
+            "route": "/invoice/edit-invoices",
+            "active_link": "/invoice/edit-invoices"
+          },
+          {
+            "menuValue": "Détails de la Facture",
+            "route": "/invoice/view-invoice",
+            "active_link": "/invoice/view-invoices"
+          },
+          {
+            "menuValue": "Paramètres de Facturation",
+            "route": "/invoice/invoices-settings",
+            "active_link": "/invoice/invoices-settings"
+          }
+        ]
+      },
+      {
+        "menuValue": "Paramètres",
+        "route": "/settings/settings",
+        "hasSubRoute": false,
+        "showSubRoute": false,
+        "active_link": "/settings",
+        "image": "menu-icon-16.svg",
+        "subMenus": []
+      }
+    ]
+  }
+]
