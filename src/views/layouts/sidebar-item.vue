@@ -37,37 +37,6 @@
         </li>
       </template>
     </template>
-<<<<<<< HEAD
-    <li class="submenu">
-      <a href="javascript:void(0);"><i class="fa fa-share-alt"></i> <span>Multi Level</span>
-        <span class="menu-arrow"></span></a>
-      <ul style="display: none">
-        <li class="submenu">
-          <a href="javascript:void(0);"><span>Level 1</span> <span class="menu-arrow"></span></a>
-          <ul style="display: none">
-            <li>
-              <a href="javascript:void(0);"><span>Level 2</span></a>
-            </li>
-            <li class="submenu">
-              <a href="javascript:void(0);">
-                <span> Level 2</span> <span class="menu-arrow"></span></a>
-              <ul style="display: none">
-                <li><a href="javascript:void(0);">Level 3</a></li>
-                <li><a href="javascript:void(0);">Level 3</a></li>
-              </ul>
-            </li>
-            <li>
-              <a href="javascript:void(0);"><span>Level 2</span></a>
-            </li>
-          </ul>
-        </li>
-        <li>
-          <a href="javascript:void(0);"><span>Level 1</span></a>
-        </li>
-      </ul>
-    </li>
-=======
->>>>>>> d7b95d000347e740153a809c33616ccc88468999
   </ul>
 </template>
 
